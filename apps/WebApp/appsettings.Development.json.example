@@ -1,4 +1,7 @@
 {
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=localhost;Database=ExpenseTracker;User=SA;Password=Strong@Passw0rd;Encrypt=false;TrustServerCertificate=true"
+  },
   "Serilog": {
     "Using": ["Serilog.Sinks.File", "Serilog.Sinks.Console"],
     "MinimumLevel": {

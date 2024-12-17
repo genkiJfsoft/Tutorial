@@ -1,4 +1,5 @@
 using ExpenseTracker.Core.Application;
+using ExpenseTracker.Core.Providers;
 using Serilog;
 using Serilog.Events;
 using Serilog.Extensions.Hosting;
@@ -20,6 +21,7 @@ public static class Builder
             .ReadFrom.Configuration(builder.Configuration)
             .ReadFrom.Services(s));
 
+        builder.Services.AddCoreProviders(builder.Configuration);
         builder.Services.AddCoreApplication();
         
         builder.Services.AddRazorComponents()

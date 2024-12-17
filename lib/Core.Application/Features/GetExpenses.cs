@@ -1,23 +1,23 @@
+using ExpenseTracker.Core.Application.Services;
+using Microsoft.EntityFrameworkCore;
+
 namespace ExpenseTracker.Core.Application.Features;
 
 public record GetExpenses : IRequest<Result<List<ExpenseData>>>
 {
-    internal class RequestHandler() : IRequestHandler<GetExpenses, Result<List<ExpenseData>>>
+    public int Limit { get; init; } = 10;
+    
+    internal class RequestHandler(IDbContext dbContext) : IRequestHandler<GetExpenses, Result<List<ExpenseData>>>
     {
-        public Task<Result<List<ExpenseData>>> Handle(GetExpenses request, CancellationToken cancellationToken)
+        public async Task<Result<List<ExpenseData>>> Handle(GetExpenses request, CancellationToken cancellationToken)
         {
-            var list = new List<ExpenseData>()
-            {
-                new ExpenseData
-                {
-                    Amount = 1000,
-                    Title = "Purchase Item A",
-                    CreatedBy = "N/A",
-                    CreatedAt = DateTime.Now.AddDays(-1),
-                }
-            };
+            var list = await dbContext.Expenses.AsNoTracking()
+                .OrderBy(e => e.Id)
+                .Take(request.Limit)
+                .Select((e) => ExpenseData.Create(e))
+                .ToListAsync(cancellationToken);
 
-            return Task.FromResult(Result<List<ExpenseData>>.Success(list));
+            return Result<List<ExpenseData>>.Success(list);
         }
     }
 }

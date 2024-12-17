@@ -1,3 +1,4 @@
+using ExpenseTracker.Core.Providers.Persistence;
 using ExpenseTracker.WebApp;
 using ExpenseTracker.WebApp.Components;
 using Serilog;
@@ -11,6 +12,13 @@ try
         .CreateBuilder(args)
         .ConfigureBuilder()
         .Build();
+    
+    #region Initialize the database
+    using var scope = app.Services.CreateScope();
+    await DbInitializer.InitializeDatabaseAsync(scope.ServiceProvider);
+    await DbInitializer.RequiredData.SeedAsync(scope.ServiceProvider);
+    if (app.Environment.IsDevelopment()) await DbInitializer.DummyData.SeedAsync(scope.ServiceProvider);
+    #endregion
     
     Log.Information("Configuring host...");
 
