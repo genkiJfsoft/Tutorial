@@ -1,3 +1,4 @@
+using ExpenseTracker.Core.Application;
 using Serilog;
 using Serilog.Events;
 using Serilog.Extensions.Hosting;
@@ -18,6 +19,8 @@ public static class Builder
         builder.Services.AddSerilog((s, c) => c
             .ReadFrom.Configuration(builder.Configuration)
             .ReadFrom.Services(s));
+
+        builder.Services.AddCoreApplication();
         
         builder.Services.AddRazorComponents()
             .AddInteractiveServerComponents();

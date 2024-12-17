@@ -11,4 +11,9 @@
     <ProjectReference Include="..\Extensions\Extensions.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Ardalis.Result" />
+    <PackageReference Include="MediatR" />
+  </ItemGroup>
+
 </Project>

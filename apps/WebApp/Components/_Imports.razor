@@ -1,5 +1,8 @@
 ﻿@using System.Net.Http
 @using System.Net.Http.Json
+@using ExpenseTracker.Core.Application.Data
+@using ExpenseTracker.Core.Application.Features
+@using ExpenseTracker.Core.Application.Services
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Routing
 @using Microsoft.AspNetCore.Components.Web
@@ -8,3 +11,5 @@
 @using Microsoft.JSInterop
 @using WebApp
 @using WebApp.Components
+
+@inject IScopedSender Mediator
