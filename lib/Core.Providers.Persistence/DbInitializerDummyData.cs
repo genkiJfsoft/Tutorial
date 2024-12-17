@@ -45,7 +45,7 @@ public static partial class DbInitializer
                     {
                         Amount = 100m,
                         Title = $"Expense #{i}",
-                        CreatedBy = "Dummy User",
+                        CreatedBy = Identity.DefaultUserId,
                         CreatedAt = timeProvider.GetLocalNow(),
                     });
                 }

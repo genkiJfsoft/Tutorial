@@ -16,7 +16,9 @@ try
     #region Initialize the database
     using var scope = app.Services.CreateScope();
     await DbInitializer.InitializeDatabaseAsync(scope.ServiceProvider);
-    await DbInitializer.RequiredData.SeedAsync(scope.ServiceProvider);
+    await DbInitializer.Identity.EnsureRolesAsync(scope.ServiceProvider);
+    await DbInitializer.Identity.EnsureDefaultUserAsync(scope.ServiceProvider);
+    await DbInitializer.Data.SeedAsync(scope.ServiceProvider);
     if (app.Environment.IsDevelopment()) await DbInitializer.DummyData.SeedAsync(scope.ServiceProvider);
     #endregion
     

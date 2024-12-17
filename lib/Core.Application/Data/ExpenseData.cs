@@ -27,9 +27,9 @@ public record ExpenseData
             Title = o.Title,
             Amount = o.Amount,
             Remarks = o.Remarks,
-            TransactionBy = o.TransactionBy,
-            CreatedBy = o.CreatedBy,
-            UpdatedBy = o.UpdatedBy,
+            TransactionBy = o.TransactionByUser?.DisplayName,
+            CreatedBy = o.CreatedByUser.DisplayName ?? "N/A",
+            UpdatedBy = o.UpdatedByUser?.DisplayName,
             TransactionAt = o.TransactionAt,
             CreatedAt = o.CreatedAt,
             UpdatedAt = o.UpdatedAt

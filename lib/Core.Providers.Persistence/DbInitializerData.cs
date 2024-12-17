@@ -9,7 +9,7 @@ public static partial class DbInitializer
     /// See also <see href="https://learn.microsoft.com/en-us/ef/core/modeling/data-seeding#model-managed-data">Model managed data</see>, for managing required data as part of 
     /// a model configuration with EF Core migrations.
     /// </remarks>
-    public static class RequiredData
+    public static class Data
     {
         public static async Task SeedAsync(IServiceProvider serviceProvider)
         {

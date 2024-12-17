@@ -12,6 +12,9 @@ public record GetExpenses : IRequest<Result<List<ExpenseData>>>
         public async Task<Result<List<ExpenseData>>> Handle(GetExpenses request, CancellationToken cancellationToken)
         {
             var list = await dbContext.Expenses.AsNoTracking()
+                .Include(e => e.TransactionByUser)
+                .Include(e => e.CreatedByUser)
+                .Include(e => e.UpdatedByUser)
                 .OrderBy(e => e.Id)
                 .Take(request.Limit)
                 .Select((e) => ExpenseData.Create(e))

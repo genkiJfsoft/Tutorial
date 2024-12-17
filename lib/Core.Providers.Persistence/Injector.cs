@@ -1,5 +1,6 @@
 ﻿using ExpenseTracker.Core.Application.Services;
 using ExpenseTracker.Core.Providers.Persistence.Interceptors;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace ExpenseTracker.Core.Providers.Persistence;
@@ -31,5 +32,11 @@ public static class Injector
         services.AddScoped<IDbContext>(sp => sp.GetRequiredService<IDbContextFactory<DefaultDbContext>>().CreateDbContext());
 
         return services;
+    }
+    
+    public static IdentityBuilder AddPersistenceStores(this IdentityBuilder builder)
+    {
+        builder.AddEntityFrameworkStores<DefaultDbContext>();
+        return builder;
     }
 }

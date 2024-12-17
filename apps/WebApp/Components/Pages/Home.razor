@@ -15,6 +15,7 @@ Welcome to ExpenseTracker.
             <li>
                 <h5>@expense.Title</h5>
                 <p>RM @expense.Amount</p>
+                <small>@(expense.CreatedBy)</small>
                 <small>@(expense.TransactionAt ?? expense.CreatedAt)</small>
             </li>
         }

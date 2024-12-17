@@ -13,6 +13,10 @@ public class Expense : IEntity, ITimestampable
     public DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset? UpdatedAt { get; set; }
 
+    public virtual User? TransactionByUser { get; } = default;
+    public virtual User CreatedByUser { get; } = null!;
+    public virtual User? UpdatedByUser { get; } = default;
+
     public Expense()
     {
         Id = Guid.CreateVersion7().ToString();

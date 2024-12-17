@@ -4,6 +4,7 @@ using ExpenseTracker.Core.Providers.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ExpenseTracker.Core.Providers.Persistence.Migrations
 {
     [DbContext(typeof(DefaultDbContext))]
-    partial class DefaultDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241217180245_Identity")]
+    partial class Identity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,7 +38,7 @@ namespace ExpenseTracker.Core.Providers.Persistence.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Remarks")
                         .HasColumnType("nvarchar(max)");
@@ -48,21 +51,15 @@ namespace ExpenseTracker.Core.Providers.Persistence.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("TransactionBy")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTimeOffset?>("UpdatedAt")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("UpdatedBy")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedBy");
-
-                    b.HasIndex("TransactionBy");
-
-                    b.HasIndex("UpdatedBy");
 
                     b.ToTable("Expense", (string)null);
                 });
@@ -297,29 +294,6 @@ namespace ExpenseTracker.Core.Providers.Persistence.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("UserToken", (string)null);
-                });
-
-            modelBuilder.Entity("ExpenseTracker.Core.Domain.Expense", b =>
-                {
-                    b.HasOne("ExpenseTracker.Core.Domain.User", "CreatedByUser")
-                        .WithMany()
-                        .HasForeignKey("CreatedBy")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ExpenseTracker.Core.Domain.User", "TransactionByUser")
-                        .WithMany()
-                        .HasForeignKey("TransactionBy");
-
-                    b.HasOne("ExpenseTracker.Core.Domain.User", "UpdatedByUser")
-                        .WithMany()
-                        .HasForeignKey("UpdatedBy");
-
-                    b.Navigation("CreatedByUser");
-
-                    b.Navigation("TransactionByUser");
-
-                    b.Navigation("UpdatedByUser");
                 });
 
             modelBuilder.Entity("ExpenseTracker.Core.Domain.RoleClaim", b =>
