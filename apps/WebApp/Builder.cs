@@ -1,3 +1,7 @@
+using Serilog;
+using Serilog.Events;
+using Serilog.Extensions.Hosting;
+
 namespace ExpenseTracker.WebApp;
 
 /// <summary>
@@ -11,9 +15,26 @@ public static class Builder
     /// <returns>A configured <see cref="WebApplicationBuilder"/>.</returns>
     public static WebApplicationBuilder ConfigureBuilder(this WebApplicationBuilder builder)
     {
+        builder.Services.AddSerilog((s, c) => c
+            .ReadFrom.Configuration(builder.Configuration)
+            .ReadFrom.Services(s));
+        
         builder.Services.AddRazorComponents()
             .AddInteractiveServerComponents();
         
         return builder;
+    }
+
+    /// <summary>
+    /// Creates a temporary logger instance that can be used to log application startup
+    /// events until the full logger configuration is available.
+    /// </summary>
+    public static ReloadableLogger CreateBootstrapLogger()
+    {
+        return new LoggerConfiguration()
+            .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+            .Enrich.FromLogContext()
+            .WriteTo.Console()
+            .CreateBootstrapLogger();
     }
 }
