@@ -1,6 +1,5 @@
 using ExpenseTracker.Core.Providers.Persistence;
 using ExpenseTracker.WebApp;
-using ExpenseTracker.WebApp.Components;
 using Serilog;
 
 try
