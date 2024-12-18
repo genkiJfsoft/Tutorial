@@ -27,6 +27,10 @@ public static class Builder
         builder.Services.AddRazorComponents()
             .AddInteractiveServerComponents();
         
+#if DEBUG
+        builder.Services.AddSassCompiler();
+#endif
+        
         return builder;
     }
 

@@ -1,0 +1,12 @@
+{
+  "Source": "wwwroot/scss/main.scss",
+  "Target": "wwwroot/css/main.css",
+  "Arguments": "--style=compressed",
+  "GenerateScopedCss": false,
+  "IncludePaths": [],
+  "Configurations": {
+    "Debug": {
+      "Arguments": "--style=expanded"
+    }
+  }
+}
