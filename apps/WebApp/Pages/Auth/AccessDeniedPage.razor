@@ -1,0 +1,18 @@
+@attribute [Route(Route)]
+
+<PageTitle>Access denied</PageTitle>
+
+<div class="col-lg-6 mx-auto">
+    <div class="card border-danger">
+        <div class="card-header">
+            Access denied!
+        </div>
+        <div class="card-body">
+            You do not have access to this resource.
+        </div>
+    </div>
+</div>
+
+@code {
+    public const string Route = "/AccessDenied";
+}

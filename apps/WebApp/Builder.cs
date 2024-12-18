@@ -1,5 +1,10 @@
 using ExpenseTracker.Core.Application;
+using ExpenseTracker.Core.Application.Services;
 using ExpenseTracker.Core.Providers;
+using ExpenseTracker.WebApp.Endpoints;
+using ExpenseTracker.WebApp.Services;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Serilog;
 using Serilog.Events;
 using Serilog.Extensions.Hosting;
@@ -24,6 +29,19 @@ public static class Builder
         builder.Services.AddCoreProviders(builder.Configuration);
         builder.Services.AddCoreApplication();
         
+        builder.Services.ConfigureApplicationCookie(options =>
+        {
+            options.LoginPath = Pages.Auth.LoginPage.Route;
+            options.LogoutPath = AuthEndpoints.LogoutRoute;
+            options.AccessDeniedPath = Pages.Auth.AccessDeniedPage.Route;
+        });
+        
+        builder.Services.AddCascadingAuthenticationState();
+        builder.Services.AddScoped<IdentityRedirectManager>();
+        builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
+        
+        builder.Services.AddHttpContextAccessor();
+
         builder.Services.AddRazorComponents()
             .AddInteractiveServerComponents();
         

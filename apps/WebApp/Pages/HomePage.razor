@@ -6,33 +6,4 @@
     <h1>Hello, world!</h1>
 
     Welcome to ExpenseTracker.
-
-    @if (_expenses != null)
-    {
-        <h2>Expenses</h2>
-        <ul>
-            @foreach (var expense in _expenses)
-            {
-                <li>
-                    <h5>@expense.Title</h5>
-                    <p>RM @expense.Amount</p>
-                    <small>@(expense.CreatedBy)</small>
-                    <small>@(expense.TransactionAt ?? expense.CreatedAt)</small>
-                </li>
-            }
-        </ul>
-    }
 </div>
-
-@code {
-    private List<ExpenseData>? _expenses;
-    
-    protected override async Task OnInitializedAsync()
-    {
-        var result = await Mediator.Send(new GetExpenses());
-        if (result.IsSuccess)
-        {
-            _expenses = result.Value;
-        }
-    }
-}

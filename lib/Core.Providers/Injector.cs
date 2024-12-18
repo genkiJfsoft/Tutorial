@@ -37,7 +37,7 @@ public static class Injector
             .AddSignInManager()
             .AddClaimsPrincipalFactory<DefaultUserClaimsPrincipalFactory>()
             .AddDefaultTokenProviders();
-
+        
         return services;
     }
 }

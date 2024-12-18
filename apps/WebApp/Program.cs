@@ -1,5 +1,6 @@
 using ExpenseTracker.Core.Providers.Persistence;
 using ExpenseTracker.WebApp;
+using ExpenseTracker.WebApp.Endpoints;
 using Serilog;
 
 try
@@ -40,6 +41,8 @@ try
     app.MapStaticAssets();
     app.MapRazorComponents<App>()
         .AddInteractiveServerRenderMode();
+    
+    app.MapAuthEndpoints();
     
     Log.Information("Running...");
     

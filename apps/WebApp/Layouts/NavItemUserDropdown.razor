@@ -1,0 +1,74 @@
+@using System.Security.Claims
+@using ExpenseTracker.Extensions.Authorizations
+@using ExpenseTracker.WebApp.Endpoints
+@using Microsoft.AspNetCore.Components.Authorization
+
+@implements IDisposable
+
+@inject NavigationManager NavigationManager
+
+<AuthorizeView>
+    <Authorized>
+        <li class="nav-item ms-3 dropdown">
+            <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa fa-2x fa-user-circle"></i>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown" data-bs-popper="static">
+                <li>
+                    <div class="dropdown-item">
+                        <div>
+                            @context.User.GetDisplayName()
+                        </div>
+                        <small>@($"@{context.User.GetUsername()}")</small>
+                    </div>
+                </li>
+
+                <li><hr class="dropdown-divider"></li>
+
+                <li><h6 class="dropdown-header">Portal</h6></li>
+                
+                <li>
+                    <NavLink class="dropdown-item" href="@Pages.Portal.DashboardPage.Route">Dashboard</NavLink>
+                </li>
+
+                <li><hr class="dropdown-divider"></li>
+                
+                <li>
+                    <form action="@AuthEndpoints.LogoutRoute" method="post">
+                        <AntiforgeryToken/>
+                        <input type="hidden" name="ReturnUrl" value="@_currentUrl"/>
+                        <button type="submit" class="dropdown-item hstack justify-content-between">
+                            Sign Out
+                        </button>
+                    </form>
+                </li>
+            </ul>
+        </li>
+    </Authorized>
+    <NotAuthorized>
+        <li class="nav-item">
+            <NavLink class="nav-link" href="@Pages.Auth.LoginPage.Route">Login</NavLink>
+        </li>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    private string? _currentUrl;
+
+    protected override void OnInitialized()
+    {
+        _currentUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+        NavigationManager.LocationChanged += OnLocationChanged;
+    }
+
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        _currentUrl = NavigationManager.ToBaseRelativePath(e.Location);
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        NavigationManager.LocationChanged -= OnLocationChanged;
+    }
+}
