@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace ExpenseTracker.Core.Providers.Persistence;
 
-internal class DefaultDbContext : IdentityDbContext<User, Role, string, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>, IDbContext
+public class DefaultDbContext : IdentityDbContext<User, Role, string, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>, IDbContext
 {
     public DbSet<Expense> Expenses { get; set; } = null!;
     

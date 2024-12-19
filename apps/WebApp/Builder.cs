@@ -1,7 +1,9 @@
 using ExpenseTracker.Core.Application;
 using ExpenseTracker.Core.Application.Services;
 using ExpenseTracker.Core.Providers;
+using ExpenseTracker.Core.Providers.Persistence;
 using ExpenseTracker.WebApp.Endpoints;
+using ExpenseTracker.WebApp.Infrastructure;
 using ExpenseTracker.WebApp.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -41,7 +43,10 @@ public static class Builder
         builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
         
         builder.Services.AddHttpContextAccessor();
-
+        builder.Services.AddScoped<IUserContext, HttpUserContext>();
+        
+        builder.Services.AddExceptionHandler<CustomExceptionHandler>();
+        
         builder.Services.AddRazorComponents()
             .AddInteractiveServerComponents();
         

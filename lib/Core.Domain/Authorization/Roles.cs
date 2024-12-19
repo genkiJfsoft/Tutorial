@@ -1,6 +1,6 @@
 using System.Reflection;
 
-namespace ExpenseTracker.Core.Domain.Authorizations;
+namespace ExpenseTracker.Core.Domain.Authorization;
 
 /// <summary>
 /// Defines the roles available in the application.
@@ -18,7 +18,7 @@ public static class Roles
     /// Returns all role names defined in this constants class.
     /// </summary>
     /// <remarks>
-    /// This method uses reflection to retrieve the names of all public static fields in the Roles class and its nested types.
+    /// This method uses reflection to retrieve the names of all public static fields nested in the <see cref="Roles"/> class.
     /// </remarks>
     /// <returns>An array of strings containing the role names.</returns>
     public static List<string> GetValues()

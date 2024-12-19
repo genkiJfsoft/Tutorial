@@ -1,4 +1,5 @@
 ﻿using ExpenseTracker.Core.Domain;
+using ExpenseTracker.Core.Domain.Authorization;
 using ExpenseTracker.Core.Providers.Persistence;
 using ExpenseTracker.Core.Providers.Identity;
 using Microsoft.AspNetCore.Identity;
@@ -18,6 +19,7 @@ public static class Injector
         services.AddSingleton(TimeProvider.System);
         services.AddCorePersistence(configuration.GetConnectionString("DefaultConnection"));
         services.AddCoreIdentity();
+        services.AddCoreAuthorization();
 
         return services;
     }
@@ -35,9 +37,24 @@ public static class Injector
             .AddRoles<Role>()
             .AddPersistenceStores()
             .AddSignInManager()
-            .AddClaimsPrincipalFactory<DefaultUserClaimsPrincipalFactory>()
+            .AddClaimsPrincipalFactory<CustomUserClaimsPrincipalFactory>()
             .AddDefaultTokenProviders();
         
+        return services;
+    }
+
+    private static IServiceCollection AddCoreAuthorization(this IServiceCollection services)
+    {
+        services.AddAuthorizationCore(options =>
+        {
+            // Add all Permissions as Policy which requires that the current user has the "Permission" claim
+            // and the claim value match the specified permission value.
+            foreach (var value in Permissions.GetValues())
+            {
+                options.AddPolicy(value, policy => policy.RequireClaim(CustomClaimTypes.Permission, value));
+            }
+        });
+
         return services;
     }
 }

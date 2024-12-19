@@ -1,6 +1,6 @@
 using System.Security.Claims;
 
-namespace ExpenseTracker.Extensions.Authorizations;
+namespace ExpenseTracker.Extensions.Authorization;
 
 public static class ClaimsPrincipalExtensions
 {

@@ -1,4 +1,4 @@
-using ExpenseTracker.Core.Domain.Authorizations;
+using ExpenseTracker.Core.Domain.Authorization;
 using Microsoft.AspNetCore.Identity;
 
 namespace ExpenseTracker.Core.Providers.Persistence;

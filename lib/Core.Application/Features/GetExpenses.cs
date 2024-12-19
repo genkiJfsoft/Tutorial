@@ -1,8 +1,11 @@
 using ExpenseTracker.Core.Application.Services;
+using ExpenseTracker.Core.Domain.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseTracker.Core.Application.Features;
 
+[Authorize]
 public record GetExpenses : IRequest<Result<List<ExpenseData>>>
 {
     public int Limit { get; init; } = 10;

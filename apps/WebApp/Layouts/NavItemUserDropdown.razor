@@ -1,5 +1,5 @@
 @using System.Security.Claims
-@using ExpenseTracker.Extensions.Authorizations
+@using ExpenseTracker.Extensions.Authorization
 @using ExpenseTracker.WebApp.Endpoints
 @using Microsoft.AspNetCore.Components.Authorization
 
@@ -10,15 +10,16 @@
 <AuthorizeView>
     <Authorized>
         <li class="nav-item ms-3 dropdown">
-            <a class="nav-link dropdown-toggle" id="userDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="fa fa-2x fa-user-circle"></i>
+            <a class="avatar avatar-sm p-0" id="userDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <img class="avatar-img bg-secondary-subtle rounded-2" src="@Assets["img/default-avatar.png"]" alt="avatar">
             </a>
+            
             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown" data-bs-popper="static">
                 <li>
                     <div class="dropdown-item">
-                        <div>
+                        <h6 class="mb-0">
                             @context.User.GetDisplayName()
-                        </div>
+                        </h6>
                         <small>@($"@{context.User.GetUsername()}")</small>
                     </div>
                 </li>

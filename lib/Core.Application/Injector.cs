@@ -18,6 +18,7 @@ public static class Injector
         {
             cfg.RegisterServicesFromAssembly(assemblyToScan);
             cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionPipeline<,>));
+            cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(AuthorizationPipeline<,>));
         });
 
         services.AddScoped<IScopedSender, ScopedSender>();
