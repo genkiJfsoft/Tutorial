@@ -1,13 +1,21 @@
-<header class="sticky-top">
-    <nav class="navbar sticky-top navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
+<header id="topbar">
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container-lg gap-5">
             <a class="navbar-brand" href="/">ExpenseTracker</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            
+            <div class="hstack order-lg-1 gap-3">
+                <ul class="nav">
+                    <UserNavItemDropdown />
+                </ul>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="bi bi-list"></i>
+                </button>
+            </div>
+            
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav align-items-center ms-auto mb-2 mb-lg-0">
+                <ul class="navbar-nav">
                     <li class="nav-item"><NavLink class="nav-link" href="/" Match="@NavLinkMatch.All">Home</NavLink></li>
-                    
-                    <NavItemUserDropdown />
                 </ul>
             </div>
         </div>

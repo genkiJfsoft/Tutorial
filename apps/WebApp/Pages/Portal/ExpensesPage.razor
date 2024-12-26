@@ -1,0 +1,51 @@
+@attribute [Route(Route)]
+
+<div class="container-lg mt-5">
+    <h3>Expenses</h3>
+
+    @if (_expenses != null)
+    {
+        <div class="card mt-4">
+            <div class="card-body p-0">
+                <table class="table table-striped m-0">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Date</th>
+                        <th>Expense</th>
+                        <th>Amount</th>
+                        <th>Added by</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var (i, e) in _expenses.Select((e, i) => (i+1, e)))
+                    {
+                        <tr>
+                            <td>@i</td>
+                            <td>@((e.TransactionAt ?? e.CreatedAt).ToString("g"))</td>
+                            <td>@e.Title</td>
+                            <td>RM @e.Amount</td>
+                            <td>@(e.CreatedBy)</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    public const string Route = "/Portal/Expenses";
+    
+    private List<ExpenseData>? _expenses;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await Mediator.Send(new GetExpenses());
+        if (result.IsSuccess)
+        {
+            _expenses = result.Value;
+        }
+    }
+}

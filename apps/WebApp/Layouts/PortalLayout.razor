@@ -1,9 +1,28 @@
 @inherits LayoutComponentBase
 
 @layout RootLayout
+@inject IJSRuntime JS
 
-<div id="page-wrapper" class="min-vh-100 d-flex flex-column">
+<div id="page-wrapper" class="fixed-topbar has-sidebar">
+    <PortalLayoutTopbar/>
+    
+    <PortalLayoutSidebar />
+    
     <main id="page-content-wrapper" class="flex-fill">
         @Body
     </main>
 </div>
+
+@code {
+
+    private IJSObjectReference? sidebarModule;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            sidebarModule = await JS.InvokeAsync<IJSObjectReference>("import", "./js/sidebar.js");
+            await sidebarModule.InvokeVoidAsync("init");
+        }
+    }
+}

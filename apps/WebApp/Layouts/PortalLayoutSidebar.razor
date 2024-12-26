@@ -1,0 +1,36 @@
+@using ExpenseTracker.Core.Domain.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+
+<aside id="sidebar">
+    <div class="accordion" id="sidebarMenu">
+        <div class="mt-2 px-3 py-2 fw-medium small text-secondary">Main Navigation</div>
+        
+        <div class="list-group list-group-flush sidebar-menu-list-group">
+            <NavLink class="list-group-item list-group-item-action" href="@Pages.Portal.DashboardPage.Route" Match="NavLinkMatch.All">
+                <i class="fas fa-table-cells"></i> Dashboard
+            </NavLink>
+            <NavLink class="list-group-item list-group-item-action" href="@Pages.Portal.ExpensesPage.Route" Match="NavLinkMatch.All">
+                <i class="fa-solid fa-book"></i> Expenses
+            </NavLink>
+        </div>
+
+        <AuthorizeView Roles="@Roles.User.Admin">
+            <div class="mt-2 px-3 py-2 fw-medium small text-secondary">Manage</div>
+
+            <div class="list-group list-group-flush sidebar-menu-list-group">
+                <a class="list-group-item list-group-item-action collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseManage" aria-expanded="false" aria-controls="collapseManage">
+                    <i class="fas fa-toolbox"></i>
+                    Users & Access
+                    <b class="fas fa-angle-down"></b>
+                </a>
+                <div class="collapse" id="collapseManage" aria-labelledby="headingOne" data-bs-parent="#sidebarMenu">
+                    <div class="list-group list-group-flush">
+                        <NavLink class="list-group-item" href="@Pages.Portal.ManageUsersPage.Route">Users</NavLink>
+                        <NavLink class="list-group-item" href="@Pages.Portal.ManageRolesPage.Route">Roles</NavLink>
+                    </div>
+                </div>
+            </div>
+        </AuthorizeView>
+    </div>
+</aside>
+<aside class="sidebar-backdrop"></aside>

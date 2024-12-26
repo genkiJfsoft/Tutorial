@@ -9,7 +9,7 @@
 
 <AuthorizeView>
     <Authorized>
-        <li class="nav-item ms-3 dropdown">
+        <li class="nav-item dropdown">
             <a class="avatar avatar-sm p-0" id="userDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 <img class="avatar-img bg-secondary-subtle rounded-2" src="@Assets["img/default-avatar.png"]" alt="avatar">
             </a>
@@ -29,7 +29,7 @@
                 <li><h6 class="dropdown-header">Portal</h6></li>
                 
                 <li>
-                    <NavLink class="dropdown-item" href="@Pages.Portal.DashboardPage.Route">Dashboard</NavLink>
+                    <a class="dropdown-item" href="@Pages.Portal.DashboardPage.Route">Dashboard</a>
                 </li>
 
                 <li><hr class="dropdown-divider"></li>
