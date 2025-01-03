@@ -1,0 +1,99 @@
+@attribute [Route(Route)]
+
+@using System.ComponentModel.DataAnnotations
+@using Ardalis.Result
+@using ExpenseTracker.Core.Domain.Authorization
+@using ExpenseTracker.Extensions.Common
+
+@inject NavigationManager Nav
+
+<div class="container-lg mt-5">
+    <h3>Add User</h3>
+    
+    <div class="col-md-6 mt-3">
+        @if (!string.IsNullOrEmpty(_message))
+        {
+            <div class="alert alert-danger">
+                @(new MarkupString(_message))
+            </div>
+        }
+        
+        <EditForm FormName="AddCollectionForm" Enhance="true" Model="Input" OnValidSubmit="HandleValidSubmit">
+            <DataAnnotationsValidator/>
+
+            <div class="mb-3">
+                <label for="usernameInput" class="form-label">Username</label>
+                <InputText id="usernameInput" class="form-control" @bind-Value="Input.UserName" placeholder=""/>
+                <ValidationMessage For="() => Input.UserName"/>
+            </div>
+            <div class="mb-3">
+                <label for="nameInput" class="form-label">Name</label>
+                <InputText id="nameInput" class="form-control" @bind-Value="Input.Name" placeholder=""/>
+                <ValidationMessage For="() => Input.Name"/>
+            </div>
+            <div class="mb-3">
+                <label for="emailInput" class="form-label">Email address</label>
+                <InputText id="emailInput" class="form-control" @bind-Value="Input.Email" placeholder="name@example.com"/>
+                <ValidationMessage For="() => Input.Email"/>
+            </div>
+            <div class="mb-3">
+                <label for="roleInput" class="form-label">Assigned Role</label>
+                <select id="roleInput" class="form-select" @bind="Input.AssignedRole">
+                    <option selected>Select a role for this user</option>
+                    @* @foreach (var role in Roles.User.GetAssignableRoles()) *@
+                    @* { *@
+                    @*     <option value="@role.GetValue(null)!.ToString()">@(role.GetDisplayAttribute()!.Name)</option> *@
+                    @* } *@
+                </select>
+                <ValidationMessage For="() => Input.AssignedRole"/>
+            </div>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    public const string Route = "/Portal/Manage/Users/Add";
+    
+    private string? _message;
+    
+    [SupplyParameterFromForm] InputModel Input { get; set; } = new();
+
+    private async Task HandleValidSubmit(EditContext arg)
+    {
+        var result = await Mediator.Send(new CreateUser
+        {
+            User = new UserData()
+            {
+                UserName = Input.UserName,
+                DisplayName = Input.Name,
+                Email = Input.Email,
+                AssignedRole = Input.AssignedRole
+            }
+        });
+
+        if (result.IsConflict())
+        {
+            _message = string.Join("<br/>", result.Errors);
+        }
+        else
+        {
+            Nav.NavigateTo(ManageUsersPage.Route);
+        }
+    }
+    
+    private class InputModel
+    {
+        [Required]
+        public string UserName { get; set; } = null!;
+        
+        [Required]
+        public string Name { get; set; } = null!;
+        
+        [Required]
+        public string Email { get; set; } = null!;
+        
+        [Required]
+        public string AssignedRole { get; set; } = null!;
+    }
+}

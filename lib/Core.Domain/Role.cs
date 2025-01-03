@@ -18,6 +18,8 @@ public class Role : IdentityRole, IEntity, ITimestampable
 
     }
 
+    public string? DisplayName { get; set; }
+    
     public string? Description { get; set; }
 
     public DateTimeOffset CreatedAt { get; set; }

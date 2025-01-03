@@ -25,7 +25,7 @@
                             <td>@((e.TransactionAt ?? e.CreatedAt).ToString("g"))</td>
                             <td>@e.Title</td>
                             <td>RM @e.Amount</td>
-                            <td>@(e.CreatedBy)</td>
+                            <td>@(e.CreatedBy.DisplayName ?? e.CreatedBy.UserName)</td>
                         </tr>
                     }
                     </tbody>

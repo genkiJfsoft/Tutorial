@@ -2,8 +2,52 @@
 
 <div class="container-lg mt-5">
     <h3>Roles</h3>
+    @if (_list != null)
+    {
+        <div class="card mt-4">
+            <div class="card-body p-0">
+                <table class="table table-striped m-0">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Display Name</th>
+                        <th>Description</th>
+                        <th>Users Count</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var (i, e) in _list.Select((e, i) => (i+1, e)))
+                    {
+                        <tr>
+                            <td>@i</td>
+                            <td>@e.Name</td>
+                            <td>@e.DisplayName</td>
+                            <td>@e.Description</td>
+                            <td>@e.UsersCount</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
 </div>
 
 @code {
     public const string Route = "/Portal/Manage/Roles";
+
+    private List<RoleData>? _list;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await Mediator.Send(new GetRoles
+        {
+            IncludeUsersCount = true
+        });
+        if (result.IsSuccess)
+        {
+            _list = result.Value;
+        }
+    }
 }

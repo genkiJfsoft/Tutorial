@@ -1,5 +1,4 @@
 using System.Security.Claims;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 
 namespace ExpenseTracker.Core.Application.Features.Auth;

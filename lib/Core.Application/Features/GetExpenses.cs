@@ -1,7 +1,4 @@
 using ExpenseTracker.Core.Application.Services;
-using ExpenseTracker.Core.Domain.Authorization;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseTracker.Core.Application.Features;
 
@@ -14,13 +11,15 @@ public record GetExpenses : IRequest<Result<List<ExpenseData>>>
     {
         public async Task<Result<List<ExpenseData>>> Handle(GetExpenses request, CancellationToken cancellationToken)
         {
-            var list = await dbContext.Expenses.AsNoTracking()
+            var list = await dbContext.Expenses
+                .AsExpandable()
+                .AsNoTracking()
                 .Include(e => e.TransactionByUser)
                 .Include(e => e.CreatedByUser)
                 .Include(e => e.UpdatedByUser)
                 .OrderBy(e => e.Id)
                 .Take(request.Limit)
-                .Select((e) => ExpenseData.Create(e))
+                .Select(ExpenseData.Mapper)
                 .ToListAsync(cancellationToken);
 
             return Result<List<ExpenseData>>.Success(list);

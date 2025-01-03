@@ -31,4 +31,8 @@
     <Content Update="appsettings*.json" CopyToPublishDirectory="Never" />
   </ItemGroup>
 
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\Portal\Components\AddUserModal.razor" />
+  </ItemGroup>
+
 </Project>

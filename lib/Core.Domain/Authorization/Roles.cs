@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
 namespace ExpenseTracker.Core.Domain.Authorization;
@@ -9,9 +10,22 @@ public static class Roles
 {
     public static class User
     {
+        [Display(Name="Administrator")]
         public const string Admin = "User.Admin";
+        
+        [Display(Name="Manager")]
         public const string Manager = "User.Manager";
+        
+        [Display(Name="Basic User")]
         public const string Basic = "User.Basic";
+    }
+
+    public static List<FieldInfo> GetAll()
+    {
+        return typeof(Roles)
+            .GetNestedTypes()
+            .SelectMany(t => t.GetFields(BindingFlags.Public | BindingFlags.Static |  BindingFlags.FlattenHierarchy))
+            .ToList();
     }
 
     /// <summary>
