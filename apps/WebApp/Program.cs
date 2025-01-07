@@ -5,6 +5,7 @@ using Serilog;
 
 try
 {
+ 
     Log.Logger = Builder.CreateBootstrapLogger();
     Log.Information("Starting up...");
     

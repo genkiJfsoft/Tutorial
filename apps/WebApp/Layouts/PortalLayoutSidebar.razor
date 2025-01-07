@@ -14,6 +14,55 @@
             </NavLink>
         </div>
 
+        <div class="container mt-3" style="width: 200px; border: 1px solid black; padding: 0;">
+            <!-- Member (Non-Clickable Static Header) -->
+            <div style="border-bottom: 1px solid black; background-color: #e7f0ff; padding: 10px; font-weight: bold;">
+                Member
+            </div>
+
+            <!-- Member List (Clickable and Expandable) -->
+            <div style="border-bottom: 1px solid black;">
+                <button class="btn w-100 text-start"
+                        @onclick="ToggleMemberList"
+                        style="background-color: transparent; border: none; padding: 10px;">
+                    Member List
+                </button>
+                @if (IsMemberListExpanded)
+                {
+                    <div style="padding: 15px;">
+                    </div>
+                }
+            </div>
+
+            <!-- Sales Report (Clickable and Expandable) -->
+            <div style="border-bottom: 1px solid black;">
+                <button class="btn w-100 text-start"
+                        @onclick="ToggleSalesReport"
+                        style="background-color: transparent; border: none; padding: 10px;">
+                    Sales Report
+                </button>
+                @if (IsSalesReportExpanded)
+                {
+                    <div style="padding: 15px;">                   
+                    </div>
+                }
+            </div>
+
+            <!-- Activity List (Clickable and Expandable) -->
+            <div>
+                <button class="btn w-100 text-start"
+                        @onclick="ToggleActivityList"
+                        style="background-color: transparent; border: none; padding: 10px;">
+                    Activity List
+                </button>
+                @if (IsActivityListExpanded)
+                {
+                    <div style="padding: 15px; background-color;">
+                    </div>
+                }
+            </div>
+        </div>
+     
         <AuthorizeView Roles="@Roles.User.Admin">
             <div class="mt-2 px-3 py-2 fw-medium small text-secondary">Manage</div>
 
@@ -34,3 +83,31 @@
     </div>
 </aside>
 <aside class="sidebar-backdrop"></aside>
+
+@code {
+    private bool IsMemberListExpanded = false;
+    private bool IsSalesReportExpanded = false;
+    private bool IsActivityListExpanded = false;
+
+    private void ToggleMemberList()
+    {
+        IsMemberListExpanded = !IsMemberListExpanded;
+        IsSalesReportExpanded = false;
+        IsActivityListExpanded = false;
+    }
+
+    private void ToggleSalesReport()
+    {
+        IsSalesReportExpanded = !IsSalesReportExpanded;
+        IsMemberListExpanded = false;
+        IsActivityListExpanded = false;
+    }
+
+    private void ToggleActivityList()
+    {
+        IsActivityListExpanded = !IsActivityListExpanded;
+        IsMemberListExpanded = false;
+        IsSalesReportExpanded = false;
+    }
+}
+}

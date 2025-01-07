@@ -49,7 +49,8 @@ public static class Builder
         
         builder.Services.AddRazorComponents()
             .AddInteractiveServerComponents();
-        
+        builder.Services.AddBlazorBootstrap();
+
 #if DEBUG
         builder.Services.AddSassCompiler();
 #endif

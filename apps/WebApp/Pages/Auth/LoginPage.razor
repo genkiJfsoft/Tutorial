@@ -43,6 +43,46 @@
     </div>
 </div>
 
+<h1>Member Portal</h1>
+
+
+
+<form>
+    <!-- Email Input -->
+    <div class="form-group row mb-3">
+        <label class="col-md-2 col-form-label">Email: <span class="text-danger">*</span></label>
+        <div class="col-sm-4">
+            <input type="email" class="form-control" id="inputEmail" placeholder="Enter your email">
+        </div>
+    </div>
+
+    <!-- Password Input -->
+    <div class="form-group row mb-3">
+        <label class="col-md-2 col-form-label">Password: <span class="text-danger">*</span></label>
+        <div class="col-sm-4">
+            <input type="password" class="form-control" id="inputPassword" placeholder="Enter your password">
+        </div>
+    </div>
+
+    <!-- Language Dropdown -->
+    <div class="form-group row mb-3">
+        <label class="col-sm-2 col-form-label">Language</label>
+        <div class="col-sm-4">
+            <Dropdown>
+                <DropdownToggleButton>English</DropdownToggleButton>
+                <DropdownMenu>
+                    <DropdownItem To="#" Type="DropdownItemType.Link" Active="true">English</DropdownItem>
+                    <DropdownItem To="#" Type="DropdownItemType.Link">Chinese</DropdownItem>
+                </DropdownMenu>
+            </Dropdown>
+        </div>
+    </div>
+
+    <Button Color="ButtonColor.Light"> Login </Button>
+</form>
+
+
+
 @code {
     public const string Route = "/Login";
     
