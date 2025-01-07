@@ -617,47 +617,5 @@ $background-color: #F8F9FA; // Dropdown background
 $text-color: #000; // Dropdown text color
 $text-hover-color: #fff; // Hover text color
 
-.custom-card {
-    width: 200px;
-    border: none;
-    background-color: transparent;
 
-    .card-header {
-        background-color: $primary-color;
-        padding: 0;
-        text-align: center;
-
-        .custom-dropdown-toggle {
-            width: 100%;
-            background-color: $primary-color;
-            color: $text-hover-color;
-            font-size: 16px;
-            border: none;
-            padding: 10px 0;
-            cursor: pointer;
-
-            &:hover {
-                background-color: $hover-color;
-            }
-        }
-    }
-
-    .dropdown-menu {
-        margin-top: 0; // Aligns the dropdown with the header
-        border-radius: 0; // Matches the card's style
-        border: none;
-        padding: 0;
-        background-color: $background-color;
-
-        .dropdown-item {
-            color: $text-color;
-            padding: 10px 15px;
-
-            &:hover {
-                background-color: $primary-color;
-                color: $text-hover-color;
-            }
-        }
-    }
-}
 

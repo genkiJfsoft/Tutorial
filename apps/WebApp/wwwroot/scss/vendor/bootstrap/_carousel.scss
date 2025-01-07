@@ -11,8 +11,24 @@
 // 5. .carousel-item-next.carousel-item-start and .carousel-item-prev.carousel-item-end
 //    is the upcoming slide in transition.
 
+.carousel-inner img {
+    width: 100%;
+    height: 500px; /* Set a consistent height */
+    object-fit: cover; /* Keeps the image aspect ratio intact */
+}
+
+
+.carousel-indicators {
+    bottom: 20px; /* Move indicators inside the carousel */
+}
+
+
 .carousel {
-  position: relative;
+    position: relative;
+    margin-top: 10%;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-bottom: 10%;
 }
 
 .carousel.pointer-event {
