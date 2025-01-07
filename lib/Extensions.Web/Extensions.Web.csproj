@@ -18,12 +18,7 @@
 
   <ItemGroup>
     <Folder Include="NewFolder\NewFolder\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="wwwroot\NewFolder\carousel1.png" />
-    <None Include="wwwroot\NewFolder\carousel2.png" />
-    <None Include="wwwroot\NewFolder\carousel3.png" />
+    <Folder Include="wwwroot\NewFolder\" />
   </ItemGroup>
 
 </Project>
