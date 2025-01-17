@@ -26,10 +26,10 @@
 
                 <li><hr class="dropdown-divider"></li>
 
-                <li><h6 class="dropdown-header">Portal</h6></li>
+                <li><h6 class="dropdown-header">@L["Portal"]</h6></li>
                 
                 <li>
-                    <a class="dropdown-item" href="@Pages.Portal.DashboardPage.Route">Dashboard</a>
+                    <a class="dropdown-item" href="@Pages.Portal.DashboardPage.Route">@L["Dashboard"]</a>
                 </li>
 
                 <li><hr class="dropdown-divider"></li>
@@ -39,7 +39,7 @@
                         <AntiforgeryToken/>
                         <input type="hidden" name="ReturnUrl" value="@_currentUrl"/>
                         <button type="submit" class="dropdown-item hstack justify-content-between">
-                            Sign Out
+                            @L["Sign Out"]
                         </button>
                     </form>
                 </li>
@@ -48,7 +48,7 @@
     </Authorized>
     <NotAuthorized>
         <li class="nav-item">
-            <NavLink class="nav-link" href="@Pages.Auth.LoginPage.Route">Login</NavLink>
+            <NavLink class="nav-link" href="@Pages.Auth.LoginPage.Route">@L["Login"]</NavLink>
         </li>
     </NotAuthorized>
 </AuthorizeView>

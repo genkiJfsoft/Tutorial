@@ -7,6 +7,7 @@
     <PackageVersion Include="Ardalis.Result" Version="10.1.0" />
     <PackageVersion Include="AspNetCore.SassCompiler" Version="1.83.0" />
     <PackageVersion Include="Blazor.Bootstrap" Version="3.2.0" />
+    <PackageVersion Include="BootstrapBlazor" Version="9.2.7" />
     <PackageVersion Include="MediatR" Version="12.4.1" />
     <PackageVersion Include="Microsoft.AspNetCore.Components.Web" Version="9.0.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.0" />

@@ -1,13 +1,36 @@
 @attribute [Route(Route)]
 
 <div class="container-lg mt-5">
-    <h3>Dashboard</h3>
-
+    <h3>@L["Dashboard"]</h3>
+    
     <AuthorizeView>
-        Hello @context.User.Identity?.Name!
+     
     </AuthorizeView>
-</div>
+ 
+    </div>
 
-@code {
-    public const string Route = "/Portal";
-}
+
+
+
+    @code {
+        public const string Route = "/Portal";
+        private string SelectedCategory { get; set; } = ""; // Default selected value
+
+    private string? SelectedOption;
+
+    private void OnOptionChanged(string selectedValue)
+    {
+        SelectedOption = selectedValue;
+
+    }
+
+
+ 
+
+  
+
+
+
+    }
+  
+    

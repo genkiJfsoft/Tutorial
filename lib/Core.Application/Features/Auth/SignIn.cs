@@ -1,28 +1,94 @@
-namespace ExpenseTracker.Core.Application.Features.Auth;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 
-public record SignIn(string Username, string Password, bool Remember) : IRequest<Result>
+public record SignIn(string Email, string Password, bool Remember) : IRequest<Result>
 {
-    internal class RequestHandler(SignInManager<User> signInManager) : IRequestHandler<SignIn, Result>
+    internal class RequestHandler : IRequestHandler<SignIn, Result>
     {
+#pragma warning disable IDE0044 // Make field readonly
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
+        private readonly ILogger<RequestHandler> _logger;
+#pragma warning restore IDE0044
+
+        public RequestHandler(UserManager<User> userManager, SignInManager<User> signInManager, ILogger<RequestHandler> logger)
+        {
+            _userManager = userManager;
+            _signInManager = signInManager;
+            _logger = logger;
+        }
+
         public async Task<Result> Handle(SignIn request, CancellationToken cancellationToken)
         {
-            var signInResult = await signInManager.PasswordSignInAsync(request.Username, request.Password, request.Remember, lockoutOnFailure: false);
+            try
+            {
+                var user = await _userManager.FindByEmailAsync(request.Email);
+                if (user == null)
+                {
+                    return Result.Error("Invalid login attempt. User not found.");
+                }
 
-            // TODO: better error handling
-            if (signInResult.Succeeded)
-            {
-                return Result.Success();
-            }
-            else if (signInResult.RequiresTwoFactor)
-            {
-                return Result.Unauthorized();
-            }
-            else if (signInResult.IsLockedOut)
-            {
-                return Result.Forbidden();
-            }
+                if (string.IsNullOrEmpty(user.UserName))
+                {
+                    return Result.Error("Invalid login attempt. UserName is missing.");
+                }
 
-            return Result.Error("Invalid login attempt.");
+                var signInResult = await _signInManager.PasswordSignInAsync(user.UserName, request.Password, request.Remember, lockoutOnFailure: false);
+
+                if (signInResult.Succeeded)
+                {
+                    // Clear existing claims
+                    var existingClaims = await _userManager.GetClaimsAsync(user);
+                    foreach (var claim in existingClaims)
+                    {
+                        _logger.LogInformation("Removing claim: {Type} = {Value}", claim.Type, claim.Value);
+                        await _userManager.RemoveClaimAsync(user, claim);
+                    }
+
+                    // Add fresh claims
+                    var claims = new List<Claim>
+                    {
+                        new Claim("Category", user.Category ?? "Unknown"),
+                        new Claim("Email", user.Email ?? "Unknown"),
+                        new Claim("Name", user.UserName ?? "Unknown"),
+                        new Claim("FullName", user.FullName ?? "Unknown"),
+                       new Claim("PreferredLanguage", user.PreferredLanguage ?? "Unknown")
+                    };
+                    await _userManager.AddClaimsAsync(user, claims);
+
+                    // Force session refresh
+                    await _signInManager.SignOutAsync();
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+
+                    // Log updated claims
+                    var updatedClaims = await _userManager.GetClaimsAsync(user);
+                    foreach (var claim in updatedClaims)
+                    {
+                        _logger.LogInformation("Updated claim: {Type} = {Value}", claim.Type, claim.Value);
+                    }
+
+                    return Result.Success();
+                }
+                else if (signInResult.RequiresTwoFactor)
+                {
+                    return Result.Unauthorized("Two-factor authentication is required.");
+                }
+                else if (signInResult.IsLockedOut)
+                {
+                    return Result.Forbidden("User account is locked out.");
+                }
+
+                return Result.Error("Invalid login attempt.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while processing the sign-in request.");
+                return Result.Error("An unexpected error occurred. Please try again later.");
+            }
         }
     }
 }
+
+
+

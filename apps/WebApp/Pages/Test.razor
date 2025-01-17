@@ -1,0 +1,114 @@
+﻿@* @page "/Test"
+
+@inject UserService UserService
+
+<h1>@L("Welcome Back")</h1>
+<p>@L("Login")</p>
+<p>@L("Home")</p>
+<p>@L("Contact")</p>
+<p>@L("Forget Password")</p>
+<p>Current Language: @currentCulture</p>
+
+<div>
+    <button @onclick="@(() => ChangeLanguage("en"))">English</button>
+    <button @onclick="@(() => ChangeLanguage("zh"))">Chinese</button>
+</div>
+
+<h2>Debug Current Culture</h2>
+<p>Current Culture: @CultureInfo.CurrentCulture.Name</p>
+<p>Current UI Culture: @CultureInfo.CurrentUICulture.Name</p>
+<button @onclick="DebugLocalization" class="btn btn-info">Test Localization</button>
+<p>Debug Output:</p>
+<p>@DebugOutput</p>
+
+@code {
+    private string currentCulture = "en"; // Default culture
+    private string DebugOutput = "Click the button to debug localization.";
+
+
+
+    private async Task ChangeLanguage(string culture)
+    {
+        // Update the culture globally
+        CultureInfo.CurrentCulture = new CultureInfo(culture);
+        CultureInfo.CurrentUICulture = new CultureInfo(culture);
+
+        // Update the local variable for display
+        currentCulture = culture;
+
+        // Debug output
+        Console.WriteLine($"ChangeLanguage - Current Culture: {CultureInfo.CurrentCulture.Name}");
+        Console.WriteLine($"ChangeLanguage - Current UI Culture: {CultureInfo.CurrentUICulture.Name}");
+        Console.WriteLine($"ChangeLanguage - Preferred Language: {currentCulture}");
+
+        // Save to the database
+        var userId = await UserService.GetCurrentUserIdAsync();
+        if (userId != null)
+        {
+            var success = await UserService.UpdatePreferredLanguageAsync(userId, culture);
+            if (success)
+            {
+                Console.WriteLine($"Preferred language updated to: {culture}");
+            }
+            else
+            {
+                Console.WriteLine("Failed to update preferred language.");
+            }
+        }
+
+        // Trigger a UI refresh
+        StateHasChanged();
+    }
+
+    private void DebugLocalization()
+    {
+        try
+        {
+            ResourceManager rm = new ResourceManager("ExpenseTracker.WebApp.Resources.Strings", typeof(Strings).Assembly);
+            string? value = rm.GetString("Welcome Back", new CultureInfo(currentCulture)) ?? "Value not found";
+            DebugOutput = $"Localized value: {value}";
+            Console.WriteLine($"Localized value: {value}");
+        }
+        catch (Exception ex)
+        {
+            DebugOutput = $"Error: {ex.Message}";
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var userId = await UserService.GetCurrentUserIdAsync();
+        if (userId != null)
+        {
+            var preferredLanguage = await UserService.GetPreferredLanguageAsync(userId);
+            if (!string.IsNullOrEmpty(preferredLanguage))
+            {
+                // Apply the saved culture
+                CultureInfo.CurrentCulture = new CultureInfo(preferredLanguage);
+                CultureInfo.CurrentUICulture = new CultureInfo(preferredLanguage);
+                currentCulture = preferredLanguage;
+            }
+        }
+        Console.WriteLine($"Applied culture on load: {currentCulture}");
+    }
+
+    private string L(string key)
+    {
+        try
+        {
+            ResourceManager rm = new ResourceManager("ExpenseTracker.WebApp.Resources.Strings", typeof(Strings).Assembly);
+            string localizedValue = rm.GetString(key, new CultureInfo(currentCulture)) ?? $"[Missing: {key}]";
+            Console.WriteLine($"Localized '{key}': {localizedValue}");
+            return localizedValue;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error retrieving localized text for key '{key}': {ex.Message}");
+            return $"[Error: {key}]";
+        }
+    }
+
+}
+ *@

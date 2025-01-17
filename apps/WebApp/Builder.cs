@@ -1,3 +1,4 @@
+using ExpenseTracker.Core.Providers.Persistence.Services;
 using ExpenseTracker.Core.Application;
 using ExpenseTracker.Core.Application.Services;
 using ExpenseTracker.Core.Providers;
@@ -10,6 +11,10 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Serilog;
 using Serilog.Events;
 using Serilog.Extensions.Hosting;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Localization;
+using System.Globalization;
+using ExpenseTracker.WebApp.Components;
 
 namespace ExpenseTracker.WebApp;
 
@@ -30,7 +35,7 @@ public static class Builder
 
         builder.Services.AddCoreProviders(builder.Configuration);
         builder.Services.AddCoreApplication();
-        
+      
         builder.Services.ConfigureApplicationCookie(options =>
         {
             options.LoginPath = Pages.Auth.LoginPage.Route;
@@ -50,6 +55,47 @@ public static class Builder
         builder.Services.AddRazorComponents()
             .AddInteractiveServerComponents();
         builder.Services.AddBlazorBootstrap();
+        builder.Services.AddScoped<UserService>();
+        builder.Services.AddRazorPages();
+        builder.Services.AddServerSideBlazor();
+        builder.Services.AddHttpContextAccessor();
+        //builder.Services.AddScoped<ICookieService, CookieService>();
+
+
+
+        builder.Services.AddAuthorization(options =>
+
+        {
+            options.AddPolicy("MerchantOnly", policy =>
+                policy.RequireClaim("Category", "Merchant")); // Check if Category is "Merchant"
+
+
+        });
+        
+        builder.Services.AddLocalization();
+        builder.Services.Configure<RequestLocalizationOptions>(options =>
+        {
+            options.SetDefaultCulture(Localizations.DefaultCulture.Name);
+            options.SupportedCultures = Localizations.SupportedCultures;
+            options.SupportedUICultures = Localizations.SupportedCultures;
+            options.FallBackToParentUICultures = true;
+        });
+        // Configure supported cultures
+        //var supportedCultures = new[] { "en", "zh" };
+        //builder.Services.Configure<RequestLocalizationOptions>(options =>
+        //{
+        //    options.DefaultRequestCulture = new RequestCulture("en");
+        //    options.SupportedCultures = supportedCultures.Select(c => new CultureInfo(c)).ToList();
+        //    options.SupportedUICultures = supportedCultures.Select(c => new CultureInfo(c)).ToList();
+        //});
+
+        builder.Services.Configure<RequestLocalizationOptions>(options =>
+        {
+            options.SetDefaultCulture(Localizations.DefaultCulture.Name);
+            options.SupportedCultures = Localizations.SupportedCultures;
+            options.SupportedUICultures = Localizations.SupportedCultures;
+            options.FallBackToParentUICultures = true;
+        });
 
 #if DEBUG
         builder.Services.AddSassCompiler();

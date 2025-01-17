@@ -1,11 +1,14 @@
+using System.Globalization;
 using ExpenseTracker.Core.Providers.Persistence;
 using ExpenseTracker.WebApp;
 using ExpenseTracker.WebApp.Endpoints;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.Extensions.Options;
 using Serilog;
 
 try
 {
- 
+
     Log.Logger = Builder.CreateBootstrapLogger();
     Log.Information("Starting up...");
     
@@ -13,7 +16,16 @@ try
         .CreateBuilder(args)
         .ConfigureBuilder()
         .Build();
-    
+
+    var localizationOptions = app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value;
+ 
+    app.UseRequestLocalization(app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
+
+    app.Use(async (context, next) =>
+    {
+        Console.WriteLine($"Current UI Culture: {CultureInfo.CurrentUICulture.Name}");
+        await next.Invoke();
+    });
     #region Initialize the database
     using var scope = app.Services.CreateScope();
     await DbInitializer.InitializeDatabaseAsync(scope.ServiceProvider);
@@ -44,6 +56,7 @@ try
         .AddInteractiveServerRenderMode();
     
     app.MapAuthEndpoints();
+    app.MapLocalizationsEndpoints();
     
     Log.Information("Running...");
     

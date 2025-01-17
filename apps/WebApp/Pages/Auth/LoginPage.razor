@@ -1,71 +1,57 @@
-@using System.ComponentModel.DataAnnotations
-@using Ardalis.Result
-
+@using ExpenseTracker.WebApp.Components
 @attribute [Route(Route)]
 
-@inject IdentityRedirectManager RedirectManager
 
-<h1 class="memberPortal text-center" style="margin-bottom:5%">Member Portal</h1>
- 
-<div class="d-flex justify-content-center align-items-center" >
+
+<h1 class="memberPortal text-center" style="margin-bottom:5%">@L["Member Portal"]</h1>
+
+<div class="d-flex justify-content-center align-items-center">
     <div style="width:50%">
-       
+
         <StatusMessage Message="@_errorMessage" />
 
         <EditForm Model="Input" method="POST" OnValidSubmit="LoginUser" FormName="Login">
             <DataAnnotationsValidator />
 
             <div class="mb-3 d-flex align-items-center">
-                <label class="col-md-3 col-form-label">Email: <span class="text-danger">*</span></label>
-                <InputText @bind-Value="Input.UserName" class="form-control" autocomplete="username"
-                           aria-required="true" placeholder="Enter your username..." />
+                <label class="col-md-3 col-form-label">@L["Email"]: <span class="text-danger">*</span></label>
+                <InputText @bind-Value="Input.Email" class="form-control" autocomplete="email"
+                           aria-required="true"  />
             </div>
-            <ValidationMessage For="() => Input.UserName" />
+            <ValidationMessage For="() => Input.Email" />
 
             <div class="mb-3 d-flex align-items-center">
-                <label class="col-md-3 col-form-label">Password: <span class="text-danger">*</span></label>
+                <label class="col-md-3 col-form-label">@L["Password"]: <span class="text-danger">*</span></label>
                 <InputText @bind-Value="Input.Password" type="password" class="form-control"
-                           autocomplete="current-password" aria-required="true" placeholder="Enter your password..." />
+                           autocomplete="current-password" aria-required="true" />
             </div>
             <ValidationMessage For="() => Input.Password" />
 
-        
 
-            <div class="form-group row mb-3">
-                <label class="col-sm-3 col-form-label">Language:</label>
-                <div class="col-sm-9">
-                    <Dropdown class="w-100">
-                        <DropdownToggleButton class="w-100">English</DropdownToggleButton>
-                        <DropdownMenu class="text-start">
-                            <DropdownItem To="#" Type="DropdownItemType.Link">English</DropdownItem>
-                            <DropdownItem To="#" Type="DropdownItemType.Link">Malay</DropdownItem>
-                        </DropdownMenu>
-                    </Dropdown>
-                </div>
+            <div>
+                <label class="col-md-3 col-form-label">@L["Language"]: <span class="text-danger">*</span></label>
+                <CultureSelector @rendermode="InteractiveServer"/>
             </div>
+           
 
             <div style="display: flex; justify-content: space-between; align-items: center;">
-                <Button Color="ButtonColor.Light" type="ButtonType.Submit" style="margin-left: 30%;"> Login </Button>
-                <a href="#" class="text-primary" style="margin-right: 10%;">Forget Password?</a>
+                <Button Color="ButtonColor.Light" type="ButtonType.Submit" style="margin-left: 30%;">@L["Login"] </Button>
+                <a href=ForgetPassword class="text-primary" style="margin-right: 10%;"> @L["Forget Password"]</a>
             </div>
-
-            
         </EditForm>
     </div>
 </div>
 
-
-
-
-
-
 @code {
     public const string Route = "/Login";
-    
+
+
+
+ 
     private string? _errorMessage;
 
-    [CascadingParameter]
-    private HttpContext HttpContext { get; set; } = default!;
+    // [CascadingParameter]
+    // private HttpContext HttpContext { get; set; } = default!;
 
     [SupplyParameterFromForm]
     private InputModel Input { get; set; } = new();
@@ -73,24 +59,40 @@
     [SupplyParameterFromQuery]
     private string? ReturnUrl { get; set; }
 
+
     protected override async Task OnInitializedAsync()
     {
-        if (HttpMethods.IsGet(HttpContext.Request.Method))
+        var httpContext = HttpContextAccessor.HttpContext;
+
+        if (httpContext != null && HttpMethods.IsGet(httpContext.Request.Method))
         {
             // Clear the existing external cookie to ensure a clean login process
-            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+            await httpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+        }
+        if (httpContext == null)
+        {
+            // Handle null HttpContext appropriately
+            _errorMessage = "Unable to access HTTP context.";
+            return;
         }
     }
 
+
+
+
+
     public async Task LoginUser()
     {
-        var result = await Mediator.Send(new SignIn(Input.UserName, Input.Password, Input.RememberMe));
+        var result = await Mediator.Send(new SignIn(Input.Email, Input.Password, Input.RememberMe));
 
         // TODO: handle LoginWith2fa
 
         if (result.IsSuccess)
         {
-            RedirectManager.RedirectTo(ReturnUrl ?? Portal.DashboardPage.Route);
+            // Get user preferred culture info
+
+            // Redirect tpo /Culture?id={culture_id}&returnUrl={}
+            // RedirectManager.RedirectTo(ReturnUrl ?? Portal.DashboardPage.Route);
         }
         else if (result.IsForbidden())
         {
@@ -104,8 +106,9 @@
 
     private sealed class InputModel
     {
-        [Required(ErrorMessage = "Please enter your username")]
-        public string UserName { get; set; } = "";
+        [Required(ErrorMessage = "Please enter your email")]
+        [EmailAddress(ErrorMessage = "Invalid email format")]
+        public string Email { get; set; } = "";
 
         [Required(ErrorMessage = "Please enter your password")]
         [DataType(DataType.Password)]
@@ -114,4 +117,10 @@
         [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }
     }
+
+  
+  
+
+
+    
 }

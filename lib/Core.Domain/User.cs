@@ -17,6 +17,7 @@ public class User : IdentityUser, IEntity, ITimestampable
 
     public User() : base()
     {
+
     }
 
     public string? DisplayName { get; set; }
@@ -29,4 +30,13 @@ public class User : IdentityUser, IEntity, ITimestampable
     public virtual ICollection<UserLogin> Logins { get; set; } = [];
     public virtual ICollection<UserRole> UserRoles { get; set; } = [];
     public virtual ICollection<UserToken> Tokens { get; set; } = [];
+
+    public string? FullName { get; set; }
+    public string? MobileNo { get; set; }
+    public string Category { get; set; } = "Normal Member";
+    public string? Status { get; set; }   // E.g., Active, Suspend
+
+    public string? Country { get; set; }
+
+    public string PreferredLanguage { get; set; } = "en"; // Default to English
 }

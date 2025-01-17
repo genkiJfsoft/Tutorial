@@ -1,0 +1,362 @@
+﻿@page "/MemberList"
+
+@inject IdentityRedirectManager RedirectManager
+@using System.ComponentModel.DataAnnotations
+@using Ardalis.Result
+@using ExpenseTracker.Core.Domain.Authorization
+@using ExpenseTracker.Extensions.Common
+@inject NavigationManager NavigationManager
+@using Microsoft.AspNetCore.WebUtilities
+@inject UserService UserService
+
+<h3 style="margin-left:2%">@L["Member List"]</h3>
+@if (!string.IsNullOrEmpty(SuccessMessage))
+{
+    <div class="alert alert-success" role="alert">
+        @SuccessMessage
+    </div>
+}
+
+<!-- Filter Form -->
+<div style="margin-left:5%; margin-bottom:3%">
+    <form>
+        <!-- Username -->
+        <div class="d-flex justify-content-between align-items-center" style="width:40%">
+            <label for="username" class="form-label me-1" style="width: 150px;">@L["Username"]</label>
+            <input type="text" id="username" class="form-control" style="margin-left:2%" @bind="Filter.Username" placeholder="@L["Enter username"]" />
+        </div>
+
+        <!-- Email -->
+        <div class="d-flex justify-content-between align-items-center" style="width:40%">
+            <label for="email" class="form-label me-3" style="width: 150px;">@L["Email"]</label>
+            <input type="email" id="email" class="form-control" @bind="Filter.Email" placeholder="@L["Enter email"]" />
+        </div>
+
+        <!-- Register Date From -->
+        <div class="d-flex justify-content-between align-items-center" style="width:40%">
+            <label for="registerDateFrom" class="form-label me-5" style="white-space: nowrap; width: 150px;">
+                <span>@L["Register Date"]</span>
+                <span style="margin:25%;">@L["From"]</span>
+            </label>
+            <input type="date" id="registerDateFrom" class="form-control" style="width: 60%;" @bind="Filter.RegisterDateFrom" />
+        </div>
+
+        <!-- Register Date To -->
+        <div class="d-flex" style="width:70%; margin-left:12%">
+            <label for="registerDateTo" class="form-label d-flex flex-column align-items-start" style="margin-right:5%;">
+                <span>@L["To"]</span>
+            </label>
+            <input type="date" id="registerDateTo" class="form-control" style="width:33%;" @bind="Filter.RegisterDateTo" />
+
+            <!-- Buttons -->
+            <div>
+                <button style="margin-left: 10px;" type="button" class="btn btn-primary" @onclick="ApplyFilter">@L["Filter"]</button>
+                <button type="button" class="btn btn-success" style="margin-left: 10px; white-space: nowrap;" @onclick="AddNewMember">@L["Add New Member"]</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Member List Table -->
+<div class="container" style="padding-left: 2%; padding-right: 2%; margin-top: 2%;">
+    <table class="table table-bordered justify-content-center">
+        <thead>
+            <tr>
+                <th>@L["Username"]</th>
+                <th>@L["Full Name"]</th>
+                <th>@L["Email"]</th>
+                <th>@L["Mobile No"]</th>
+                <th>@L["Category"]</th>
+                <th>@L["Status"]</th>
+                <th>@L["Actions"]</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var member in PaginatedMembers)
+            {
+                <tr>
+                    <td>@member.UserName</td>
+                    <td>@member.FullName</td>
+                    <td>@member.Email</td>
+                    <td>@member.MobileNo</td>
+                    <td>@member.Category</td>
+                    <td>@member.Status</td>
+                    <td>
+           
+                        <Button Color="ButtonColor.Warning" @onclick="() => ConfirmToggleStatus(member)">
+                          
+                            @if (member.Status == "Active")
+                            {
+                                <Icon Name="IconName.XCircleFill" />
+                            }
+                           else
+                            {
+                                <Icon Name="IconName.CheckCircleFill" />
+                            }
+                        </Button>
+
+                        <Button Color="ButtonColor.Primary" @onclick="() => EditMember(member.Id)"> <Icon Name="IconName.PenFill" /></Button>
+                        <Button Color="ButtonColor.Danger" @onclick="() => ConfirmDeleteMember(member)"> <Icon Name="IconName.TrashFill" /></Button>
+                        
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- Pagination Controls -->
+<div class="d-flex justify-content-between align-items-center mt-3">
+    <button class="btn btn-secondary" @onclick="GoToPreviousPage" disabled="@IsFirstPage">@L["Previous"]</button>
+    <span>@L["Page"] @CurrentPage @L["of"]@TotalPages</span>
+    <button class="btn btn-secondary" @onclick="GoToNextPage" disabled="@IsLastPage">@L["Next"]</button>
+</div>
+
+<!-- Confirmation Modal -->
+<PromptMessage Visible="@ShowPrompt"
+               Message="@PromptMessage"
+               OnConfirm="ConfirmAction"
+               OnCancel="CancelPrompt" />
+
+@code {
+ 
+
+    private List<User> PaginatedMembers = new(); // Members for the current page
+    private List<User> Members = new();
+    private FilterModel Filter = new();
+    private User? SelectedMember;
+    private string ActionType = "";
+    private bool ShowPrompt = false;
+    private string PromptMessage = "";
+    private int CurrentPage = 1;
+    private int PageSize = 10;
+    private int TotalPages => (int)Math.Ceiling((double)Members.Count / PageSize);
+    private bool IsFirstPage => CurrentPage == 1;
+    private bool IsLastPage => CurrentPage == TotalPages;
+    private string? SuccessMessage;
+    private Timer? MessageTimer;
+
+    
+   
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync(); // Set preferred language from BaseLocalizedComponent
+        await LoadMembersAsync();
+        // Subscribe to the LocationChanged event
+        NavigationManager.LocationChanged += HandleLocationChanged;
+
+        await LoadMembersAsync();
+        // LanguageService.OnChange += HandleLanguageChange;
+
+
+    }
+
+    private async Task LoadMembersAsync()
+    {
+        // Load members from the service
+        Members = await UserService.GetAllUsersAsync();
+        UpdatePaginatedMembers();
+
+        // Check for query string parameters
+        ParseQueryString();
+    }
+
+    private void HandleLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        // Re-parse the query string when the URL changes
+        ParseQueryString();
+
+        // Refresh the UI
+        StateHasChanged();
+    }
+
+    private void ParseQueryString()
+    {
+        var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("message", out var message))
+        {
+            SuccessMessage = message;
+
+            // Auto-hide the message after 5 seconds
+            MessageTimer?.Dispose();
+            MessageTimer = new Timer(_ => HideSuccessMessage(), null, 5000, Timeout.Infinite);
+        }
+        else
+        {
+            SuccessMessage = null;
+        }
+    }
+
+    public void Dispose()
+    {
+        // Unsubscribe from the event to avoid memory leaks
+        NavigationManager.LocationChanged -= HandleLocationChanged;
+      
+
+    }
+
+    private void HideSuccessMessage()
+{
+    SuccessMessage = null;
+    InvokeAsync(StateHasChanged); // Ensures this runs on the UI thread
+}
+
+    protected override async Task OnParametersSetAsync()
+    {
+        var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+
+        Console.WriteLine($"Current URI: {uri}");
+
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("message", out var message))
+        {
+            Console.WriteLine($"Message found in query: {message}");
+            SuccessMessage = message;
+            StateHasChanged(); // Force UI refresh
+        }
+        else
+        {
+            Console.WriteLine("No message found in query.");
+        }
+
+        Members = await UserService.GetAllUsersAsync();
+        UpdatePaginatedMembers();
+    }
+
+    private void UpdatePaginatedMembers()
+    {
+        PaginatedMembers = Members
+            .Skip((CurrentPage - 1) * PageSize)
+            .Take(PageSize)
+            .ToList();
+    }
+
+    private void GoToPreviousPage()
+    {
+        if (!IsFirstPage)
+        {
+            CurrentPage--;
+            UpdatePaginatedMembers();
+        }
+    }
+
+    private void GoToNextPage()
+    {
+        if (!IsLastPage)
+        {
+            CurrentPage++;
+            UpdatePaginatedMembers();
+        }
+    }
+    private bool IsLoading = false;
+
+    private async Task ApplyFilter()
+    {
+        IsLoading = true;
+
+        try
+        {
+            Members = await UserService.GetFilteredUsersAsync(Filter.Username, Filter.Email, Filter.RegisterDateFrom, Filter.RegisterDateTo);
+
+            CurrentPage = 1;
+            UpdatePaginatedMembers();
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+
+    private void AddNewMember()
+    {
+
+        NavigationManager.NavigateTo("/AddNewMember");
+
+}
+
+    private void EditMember(string memberId)
+    {
+        NavigationManager.NavigateTo($"/EditMember/{memberId}?message=Edit%20Member%20Successful");
+    }
+
+    private void ConfirmDeleteMember(User member)
+    {
+        SelectedMember = member;
+        ActionType = "Delete";
+        PromptMessage = $"Are you sure you want to delete the member '{member.UserName}'?";
+        ShowPrompt = true;
+    }
+
+    private void ConfirmToggleStatus(User member)
+    {
+        SelectedMember = member;
+        ActionType = "ToggleStatus";
+        PromptMessage = member.Status == "Active"
+            ? "Are you sure you want to suspend this member?"
+            : "Are you sure you want to activate this member?";
+        ShowPrompt = true;
+    }
+
+    private async Task ConfirmAction()
+    {
+        if (ActionType == "Delete" && SelectedMember != null)
+        {
+            // Perform the delete operation
+            if (await UserService.DeleteUserAsync(SelectedMember.Id))
+            {
+                // Remove the deleted member from the Members list
+                Members.Remove(SelectedMember);
+
+                // Update the paginated members to refresh the table
+                UpdatePaginatedMembers();
+
+                // Clear the selected member
+                SelectedMember = null;
+
+                // Redirect with a success message
+                NavigationManager.NavigateTo("/MemberList?message=Delete%20Member%20Successful", forceLoad: false);
+            }
+        }
+        else if (ActionType == "ToggleStatus" && SelectedMember != null)
+        {
+            // Toggle the member's status
+            SelectedMember.Status = SelectedMember.Status == "Active" ? "Suspend" : "Active";
+
+            // Update the database
+            await UserService.UpdateUserAsync(SelectedMember);
+
+            // Refresh the table
+            UpdatePaginatedMembers();
+
+            // Redirect with a success message
+            NavigationManager.NavigateTo($"/MemberList?message={(SelectedMember.Status == "Active" ? "Member%20Activated" : "Member%20Suspended")}", forceLoad: false);
+        }
+
+        CancelPrompt();
+    }
+
+    private void CancelPrompt()
+    {
+        ShowPrompt = false;
+        SelectedMember = null;
+        ActionType = "";
+    }
+
+    public class FilterModel
+    {
+        public string? Username { get; set; }
+        public string? Email { get; set; }
+        public DateTime? RegisterDateFrom { get; set; }
+        public DateTime? RegisterDateTo { get; set; }
+    }
+
+
+}
+
+  @if (IsLoading)
+{
+    <div class="text-center">
+        <span>Loading...</span>
+    </div>
+}
+

@@ -13,6 +13,8 @@
 
   <ItemGroup>
     <PackageReference Include="Ardalis.Result" />
+    <PackageReference Include="Blazor.Bootstrap" />
+    <PackageReference Include="BootstrapBlazor" />
     <PackageReference Include="MediatR" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" />
   </ItemGroup>

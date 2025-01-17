@@ -42,7 +42,9 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var result = await Mediator.Send(new GetExpenses());
+        var result = await Mediator.Send(new GetExpenses() {
+            Limit = 50
+        });
         if (result.IsSuccess)
         {
             _expenses = result.Value;

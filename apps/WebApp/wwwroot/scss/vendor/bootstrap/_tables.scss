@@ -169,3 +169,13 @@
     }
   }
 }
+
+.table-bordered {
+    border: 10px solid #000; /* Thicker border */
+}
+
+.table-bordered th,
+.table-bordered tr,
+.table-bordered td {
+    border: 2px solid #000; /* Thicker cell borders */
+}

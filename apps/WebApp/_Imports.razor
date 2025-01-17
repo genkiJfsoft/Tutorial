@@ -12,6 +12,25 @@
 @using ExpenseTracker.WebApp
 @using ExpenseTracker.WebApp.Components
 @using ExpenseTracker.WebApp.Services
-@using BlazorBootstrap;
+@using BlazorBootstrap
+@using System.Globalization
+@using System.Collections.Generic
+@using ExpenseTracker.Core.Providers.Persistence.Services
+@using ExpenseTracker.Core.Domain
+@using System.Resources
+@using ExpenseTracker.WebApp.Resources 
+@using ExpenseTracker.WebApp.Layouts
+@using System.ComponentModel.DataAnnotations
+@using Ardalis.Result
+@using Microsoft.Extensions.Localization
+@using ExpenseTracker.WebApp.Infrastructure
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using MediatR
+@using ExpenseTracker.WebApp.Endpoints
 
 @inject IScopedSender Mediator
+@inject IStringLocalizer<Resources.Strings> L
+@inject IHttpContextAccessor HttpContextAccessor
+@inject IdentityRedirectManager RedirectManager
+@inject IJSRuntime JSRuntime

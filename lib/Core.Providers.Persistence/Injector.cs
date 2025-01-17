@@ -39,4 +39,5 @@ public static class Injector
         builder.AddEntityFrameworkStores<DefaultDbContext>();
         return builder;
     }
+
 }

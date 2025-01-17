@@ -7,10 +7,25 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="appsettings.Development.json" />
+    <Compile Remove="Components\NewFolder\**" />
+    <Compile Remove="wwwroot\Resources\**" />
+    <Content Remove="Components\NewFolder\**" />
+    <Content Remove="wwwroot\Resources\**" />
+    <EmbeddedResource Remove="Components\NewFolder\**" />
+    <EmbeddedResource Remove="wwwroot\Resources\**" />
+    <None Remove="Components\NewFolder\**" />
+    <None Remove="wwwroot\Resources\**" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="appsettings.Development.json" />
+    <Content Remove="CultureSelector.razor" />
+    <Content Remove="Pages\CultureSelector.razor" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\lib\Core.Domain\Core.Domain.csproj" />
+    <ProjectReference Include="..\..\lib\Core.Providers.Persistence\Core.Providers.Persistence.csproj" />
     <ProjectReference Include="..\..\lib\Core.Providers\Core.Providers.csproj" />
     <ProjectReference Include="..\..\lib\Extensions.Web\Extensions.Web.csproj" />
   </ItemGroup>
@@ -28,6 +43,7 @@
 
   <ItemGroup>
     <PackageReference Include="Blazor.Bootstrap" />
+    <PackageReference Include="BootstrapBlazor" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
