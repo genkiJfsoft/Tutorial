@@ -39,4 +39,6 @@ public class User : IdentityUser, IEntity, ITimestampable
     public string? Country { get; set; }
 
     public string PreferredLanguage { get; set; } = "en"; // Default to English
+
+    public DateTimeOffset? DeletedAt { get; set; }
 }

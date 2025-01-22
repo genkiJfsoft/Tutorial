@@ -9,8 +9,8 @@
                 <p>@Message</p>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-primary" @onclick="Confirm">Yes</button>
-                <button class="btn btn-secondary" @onclick="Cancel">No</button>
+                <button class="btn btn-warning" @onclick="Confirm">@L["Yes"]</button>
+                <button class="btn btn-warning" @onclick="Cancel">@L["No"]</button>
             </div>
         </div>
     </div>
@@ -21,7 +21,7 @@
     [Parameter] public string Message { get; set; } = string.Empty;
     [Parameter] public EventCallback OnConfirm { get; set; }
     [Parameter] public EventCallback OnCancel { get; set; }
-
+ 
     private async Task Confirm()
     {
         await OnConfirm.InvokeAsync();

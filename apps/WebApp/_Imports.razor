@@ -28,9 +28,17 @@
 @using Microsoft.AspNetCore.Components.Authorization
 @using MediatR
 @using ExpenseTracker.WebApp.Endpoints
+@using Microsoft.AspNetCore.Antiforgery
+@using System.Linq.Expressions
 
+
+
+@inject UserService UserService
+@inject NavigationManager NavigationManager
+@inject ToastService ToastService
 @inject IScopedSender Mediator
 @inject IStringLocalizer<Resources.Strings> L
 @inject IHttpContextAccessor HttpContextAccessor
 @inject IdentityRedirectManager RedirectManager
 @inject IJSRuntime JSRuntime
+@inherits LayoutComponentBase

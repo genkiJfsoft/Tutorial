@@ -15,7 +15,9 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Localization;
 using System.Globalization;
 using ExpenseTracker.WebApp.Components;
-
+using ExpenseTracker.Extensions.Authorization;
+using Microsoft.AspNetCore.Identity;
+using ExpenseTracker.Core.Domain;
 namespace ExpenseTracker.WebApp;
 
 /// <summary>
@@ -59,6 +61,7 @@ public static class Builder
         builder.Services.AddRazorPages();
         builder.Services.AddServerSideBlazor();
         builder.Services.AddHttpContextAccessor();
+
         //builder.Services.AddScoped<ICookieService, CookieService>();
 
 
@@ -71,24 +74,8 @@ public static class Builder
 
 
         });
-        
-        builder.Services.AddLocalization();
-        builder.Services.Configure<RequestLocalizationOptions>(options =>
-        {
-            options.SetDefaultCulture(Localizations.DefaultCulture.Name);
-            options.SupportedCultures = Localizations.SupportedCultures;
-            options.SupportedUICultures = Localizations.SupportedCultures;
-            options.FallBackToParentUICultures = true;
-        });
-        // Configure supported cultures
-        //var supportedCultures = new[] { "en", "zh" };
-        //builder.Services.Configure<RequestLocalizationOptions>(options =>
-        //{
-        //    options.DefaultRequestCulture = new RequestCulture("en");
-        //    options.SupportedCultures = supportedCultures.Select(c => new CultureInfo(c)).ToList();
-        //    options.SupportedUICultures = supportedCultures.Select(c => new CultureInfo(c)).ToList();
-        //});
 
+        builder.Services.AddLocalization();
         builder.Services.Configure<RequestLocalizationOptions>(options =>
         {
             options.SetDefaultCulture(Localizations.DefaultCulture.Name);

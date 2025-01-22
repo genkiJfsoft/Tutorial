@@ -142,7 +142,7 @@
     <value>语言</value>
   </data>
   <data name="English" xml:space="preserve">
-    <value>English</value>
+    <value>英语</value>
   </data>
   <data name="Chinese" xml:space="preserve">
     <value>中文</value>
@@ -309,78 +309,20 @@
   <data name="AccountSuspended" xml:space="preserve">
     <value>您的帐户已被暂停。请联系支持人员。</value>
   </data>
-  <data name="Enter your email" xml:space="preserve">
-    <value>输入你的邮箱</value>
+  <data name="WrongPassword" xml:space="preserve">
+    <value>邮箱或密码输入错误</value>
   </data>
-  <data name="Enter your password" xml:space="preserve">
-    <value>输入你的密码</value>
+  <data name="DuplicateEmail" xml:space="preserve">
+    <value>该电子邮件已被注册。请使用其他电子邮件。</value>
   </data>
-  <data name="Verify your password" xml:space="preserve">
-    <value>验证你的密码</value>
-  </data>
-  <data name="Enter your mobile number" xml:space="preserve">
-    <value>输入你的手机号码</value>
-  </data>
-  <data name="Enter your full name" xml:space="preserve">
-    <value>输入你的全名</value>
-  </data>
-  <data name="Enter your username" xml:space="preserve">
-    <value>输入你的用户名</value>
-  </data>
-  <data name="InvalidEmail" xml:space="preserve">
-    <value>⚠️电子邮件格式无效</value>
-  </data>
-  <data name="ResetPasswordSuccess1" xml:space="preserve">
-    <value>密码重置成功。请查看您的电子邮件以获取进一步的说明。</value>
-  </data>
-  <data name="FullNameRequired" xml:space="preserve">
-    <value>⚠️请输入你的全名</value>
-  </data>
-  <data name="InvalidMobileNo" xml:space="preserve">
-    <value>⚠️手机号码格式不正确</value>
-  </data>
-  <data name="MobileNoRequired" xml:space="preserve">
-    <value>⚠️请输入你的手机号</value>
-  </data>
-  <data name="UsernameRequired" xml:space="preserve">
-    <value>⚠️请输入你的用户名</value>
-  </data>
-  <data name="PasswordsNotMatch" xml:space="preserve">
-    <value>⚠️密码不匹配</value>
-  </data>
-  <data name="VerifyPassword" xml:space="preserve">
-    <value>⚠️请输入你的验证密码</value>
-  </data>
-  <data name="Edited" xml:space="preserve">
-    <value>编辑成功</value>
-  </data>
-  <data name="Added" xml:space="preserve">
-    <value>成功添加为新成员 ➕</value>
-  </data>
-  <data name="Deleted" xml:space="preserve">
-    <value>删除成功🗑️</value>
-  </data>
-  <data name="ActivatedSuccessfully" xml:space="preserve">
-    <value>已成功激活✅</value>
-  </data>
-  <data name="SuspendedSuccessfully" xml:space="preserve">
-    <value>已成功暂停 ❌</value>
-  </data>
-  <data name="ConfirmDelete" xml:space="preserve">
-    <value>您确定要删除</value>
-  </data>
-  <data name="ConfirmSuspend" xml:space="preserve">
-    <value>您确定要暂停该成员吗？</value>
-  </data>
-  <data name="ConfirmActive" xml:space="preserve">
-    <value>您确定要激活该成员吗？</value>
-  </data>
-  <data name="Yes" xml:space="preserve">
-    <value>✔️</value>
-  </data>
-  <data name="No" xml:space="preserve">
-    <value>❌
-
+  <data name="DuplicateUsername" xml:space="preserve">
+    <value>该用户名已被使用。请选择其他用户名。
 </value>
+  </data>
+  <data name="PasswordValidation" xml:space="preserve">
+    <value>密码必须至少包含一个特殊字符、一个数字、一个小写字母、一个大写字母。 (例如: Ab@123)</value>
+  </data>
+  <data name="ResetPasswordSuccess" xml:space="preserve">
+    <value>密码重置成功。请查看您的电子邮件以获取进一步的说明。</value>
   </data>
 </root>

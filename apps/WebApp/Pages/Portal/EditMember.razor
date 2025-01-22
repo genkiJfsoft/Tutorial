@@ -3,8 +3,8 @@
 @using System.ComponentModel.DataAnnotations
 @using ExpenseTracker.Core.Domain.Authorization
 
-@inject UserService UserService
-@inject NavigationManager NavigationManager
+
+
 
 <h3 style="margin-left:2%">@L["Edit Member"]</h3>
 <div class="d-flex justify-content-start ">
@@ -15,30 +15,30 @@
             <!-- Username -->
             <div class="mb-3 d-flex align-items-center">
                 <label class="col-md-3 col-form-label">@L["Username"]: <span class="text-danger">*</span></label>
-                <InputText @bind-Value="Edit.Username" class="form-control" autocomplete="username" placeholder="Enter username..." />
+                <InputText @bind-Value="Edit.Username" class="form-control" autocomplete="username"  disabled />
             </div>
             <ValidationMessage For="() => Edit.Username" />
 
             <!-- Full Name -->
             <div class="mb-3 d-flex align-items-center">
                 <label class="col-md-3 col-form-label">@L["Full Name"] : <span class="text-danger">*</span></label>
-                <InputText @bind-Value="Edit.FullName" class="form-control" placeholder="Enter full name..." />
+                <InputText @bind-Value="Edit.FullName" class="form-control" placeholder=@L["Enter your full name"] />
             </div>
-            <ValidationMessage For="() => Edit.FullName" />
+            <ValidationMessage For="() => Edit.FullName" class="text-danger " style="margin-left:25% " />
+
 
             <!-- Email -->
-            <div class="mb-3 d-flex align-items-center">
+            <div class="mt-3 mb-3 d-flex align-items-center">
                 <label class="col-md-3 col-form-label">@L["Email"]: <span class="text-danger">*</span></label>
-                <InputText @bind-Value="Edit.Email" type="email" class="form-control" placeholder="Enter email..." />
+                <InputText @bind-Value="Edit.Email" type="email" class="form-control"  disabled />
             </div>
-            <ValidationMessage For="() => Edit.Email" />
 
             <!-- Mobile No -->
             <div class="mb-3 d-flex align-items-center">
                 <label class="col-md-3 col-form-label"> @L["Mobile No"]: <span class="text-danger">*</span></label>
-                <InputText @bind-Value="Edit.MobileNo" class="form-control" placeholder="Enter mobile number..." />
+                <InputText @bind-Value="Edit.MobileNo" class="form-control" placeholder=@L["Enter your mobile number"] />
             </div>
-            <ValidationMessage For="() => Edit.MobileNo" />
+            <ValidationMessage For="() => Edit.MobileNo" class="text-danger " style="margin-left:25% " />
 
             <!-- Category -->
             <div class="form-group row align-items-center">
@@ -46,25 +46,21 @@
                 <div class="col-md-9 d-flex">
                     <div class="form-check me-4">
                         <input type="radio" id="merchant" name="category" value="Merchant"
-                               class="form-check-input"
-                               checked="@((Edit.Category ?? "") == "Merchant")"
-                               @onclick='() => Edit.Category = "Merchant"' />
+                        class="form-check-input"
+                        checked="@((Edit.Category ?? "") == "Merchant")"
+                        @onclick='() => Edit.Category = "Merchant"' />
                         <label for="merchant" class="form-check-label">@L["Merchant"]</label>
                     </div>
 
                     <div class="form-check">
                         <input type="radio" id="normalMember" name="category" value="Normal Member"
-                               class="form-check-input"
-                               checked="@((Edit.Category ?? "") == "Normal Member")"
-                               @onclick='() => Edit.Category = "Normal Member"' />
+                        class="form-check-input"
+                        checked="@((Edit.Category ?? "") == "Normal Member")"
+                        @onclick='() => Edit.Category = "Normal Member"' />
                         <label for="normalMember" class="form-check-label">@L["Normal Member"]</label>
                     </div>
                 </div>
             </div>
-
-
-
- 
 
             <!-- Country Dropdown -->
             <div class="form-group row mb-3">
@@ -89,18 +85,40 @@
 </div>
 
 @code {
+
+
+
+
+
+
+
     [Parameter]
     public string userId { get; set; } = string.Empty;
 
     private EditMemberModel Edit { get; set; } = new();
 
-    private List<string> Countries = new()
-    {
-        "USA", "Malaysia", "China", "India", "United Kingdom", "Canada", "Australia", "France", "Germany", "Japan"
-    };
 
+    private List<string> Countries = new List<string>();
+
+    private void InitializeCountries()
+    {
+        Countries = new List<string>
+        {
+            L["USA"],
+            L["Malaysia"],
+            L["China"],
+            L["India"],
+            L["United Kingdom"],
+            L["Canada"],
+            L["Australia"],
+            L["France"],
+            L["Germany"],
+            L["Japan"],
+        };
+    }
     protected override async Task OnInitializedAsync()
     {
+        InitializeCountries();
         if (!string.IsNullOrEmpty(userId))
         {
             var user = await UserService.GetUserByIdAsync(userId);
@@ -113,7 +131,7 @@
                         Email = user.Email ?? string.Empty,
                         MobileNo = user.MobileNo ?? string.Empty,
                         Category = user.Category ?? "Normal Member",
-                        Country = user.Country ?? "USA",
+                        Country = user.Country ?? @L["USA"],
                     };
             }
         }
@@ -148,8 +166,14 @@
             {
                 Console.WriteLine("User updated successfully.");
                 Console.WriteLine($"Category value before saving: {user.Category}");
-                NavigationManager.NavigateTo("/MemberList?message=Edit%20Member%20Successful");
+
+                NavigationManager.NavigateTo("/MemberList");
+                ToastService.Notify(new(ToastType.Success, $"✨{user.UserName}✨ {L["Edited"]} 🖊️"));
+
+
             }
+        
+            
             else
             {
                 Console.WriteLine("Failed to update user.");
@@ -172,16 +196,16 @@
         [Required(ErrorMessage = "Username is required.")]
         public string Username { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Full Name is required.")]
-        public string FullName { get; set; } = string.Empty;
+        [Required(ErrorMessageResourceType = typeof(Strings), ErrorMessageResourceName = "FullNameRequired")]
+        public string FullName { get; set; } = "";
 
         [Required(ErrorMessage = "Email is required.")]
         [EmailAddress(ErrorMessage = "Invalid email format.")]
         public string Email { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Mobile No is required.")]
-        [Phone(ErrorMessage = "Invalid phone number format.")]
-        public string MobileNo { get; set; } = string.Empty;
+        [Required(ErrorMessageResourceType = typeof(Strings), ErrorMessageResourceName = "MobileNoRequired")]
+        [Phone(ErrorMessageResourceType = typeof(Strings), ErrorMessageResourceName = "InvalidMobileNo")]
+        public string MobileNo { get; set; } = "";
 
         [Required(ErrorMessage = "Category is required.")]
         public string Category { get; set; } = "Normal Member";
@@ -189,6 +213,6 @@
         [Required(ErrorMessage = "Country is required.")]
         public string Country { get; set; } = string.Empty;
 
-      
+
     }
 }

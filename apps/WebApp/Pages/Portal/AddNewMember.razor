@@ -12,35 +12,46 @@
 
         <EditForm Model="Input" OnValidSubmit="AddMember">
             <DataAnnotationsValidator />
+            @if (!string.IsNullOrEmpty(_successMessage))
+            {
+                <div class="alert alert-success">
+                    @_successMessage
+                </div>
+            }
 
+            @if (!string.IsNullOrEmpty(_errorMessage))
+            {
+                <div class="alert alert-danger">
+                    @_errorMessage
+                </div>
+            }
             <!-- Username -->
-            <div class="mb-3 d-flex align-items-center">
+            <div class="mb-2 d-flex align-items-center">
                 <label class="col-md-3 col-form-label">@L["Username"]: <span class="text-danger">*</span></label>
-                <InputText @bind-Value="Input.Username" class="form-control" placeholder="Enter your username..." />
+                <InputText @bind-Value="Input.Username" class="form-control" placeholder=@L["Enter your username"] />
             </div>
-            <ValidationMessage For="() => Input.Username" />
+            <ValidationMessage For="() => Input.Username" class="text-danger " style="margin-left:25% " />
 
             <!-- Full Name -->
-            <div class="mb-3 d-flex align-items-center">
+            <div class="mb-2 d-flex align-items-center">
                 <label class="col-md-3 col-form-label">@L["Full Name"]: <span class="text-danger">*</span></label>
-                <InputText @bind-Value="Input.FullName" class="form-control" placeholder="Enter your full name..." />
+                <InputText @bind-Value="Input.FullName" class="form-control" placeholder=@L["Enter your full name"] />
             </div>
-            <ValidationMessage For="() => Input.FullName" />
+            <ValidationMessage For="() => Input.FullName" class="text-danger " style="margin-left:25% " />
 
             <!-- Email -->
-            <div class="mb-3 d-flex align-items-center">
+            <div class="mb-2 d-flex align-items-center">
                 <label class="col-md-3 col-form-label">@L["Email"]: <span class="text-danger">*</span></label>
-                <InputText @bind-Value="Input.Email" type="email" class="form-control" placeholder="Enter your email..." />
+                <InputText @bind-Value="Input.Email" type="email" class="form-control" placeholder=@L["Enter your email"] />
             </div>
-            <ValidationMessage For="() => Input.Email" />
+            <ValidationMessage For="() => Input.Email" class="text-danger " style="margin-left:25% " />
 
             <!-- Mobile No -->
-            <div class="mb-3 d-flex align-items-center">
+            <div class="mb-2 d-flex align-items-center">
                 <label class="col-md-3 col-form-label">@L["Mobile No"]: <span class="text-danger">*</span></label>
-                <InputText @bind-Value="Input.MobileNo" class="form-control" placeholder="Enter your mobile number..." />
+                <InputText @bind-Value="Input.MobileNo" class="form-control" placeholder=@L["Enter your mobile number"] />
             </div>
-            <ValidationMessage For="() => Input.MobileNo" />
-
+            <ValidationMessage For="() => Input.MobileNo" class="text-danger " style="margin-left:25% " />
             <!-- Category -->
             <div class="form-group row align-items-center">
                 <label class="col-md-3 col-form-label">@L["Category"]: <span class="text-danger">*</span></label>
@@ -50,7 +61,7 @@
                         class="form-check-input"
                         checked="@((Input.Category ?? "") == "Merchant")"
                         @onclick='() => Input.Category = "Merchant"' />
-                        <label for="merchant" class="form-check-label">Merchant</label>
+                        <label for="merchant" class="form-check-label">@L["Merchant"]</label>
                     </div>
 
                     <div class="form-check">
@@ -58,7 +69,7 @@
                         class="form-check-input"
                         checked="@((Input.Category ?? "") == "Normal Member")"
                         @onclick='() => Input.Category = "Normal Member"' />
-                        <label for="normalMember" class="form-check-label">Normal Member</label>
+                        <label for="normalMember" class="form-check-label">@L["Normal Member"]</label>
                     </div>
                 </div>
             </div>
@@ -81,24 +92,22 @@
                     </select>
                 </div>
             </div>
-            <ValidationMessage For="() => Input.Country" />
+            <ValidationMessage For="() => Input.Country" class="text-danger " style="margin-left:25% " />
 
             <!-- Password -->
-            <div class="mb-3 d-flex align-items-center">
+            <div class="mb-2 d-flex align-items-center">
                 <label class="col-md-3 col-form-label">@L["Password"]: <span class="text-danger">*</span></label>
                 <InputText @bind-Value="Input.Password" type="password" class="form-control"
-                placeholder="Enter your password..." />
+                placeholder=@L["Enter your password"] />
             </div>
-            <ValidationMessage For="() => Input.Password" />
-
+            <ValidationMessage For="() => Input.Password" class="text-danger " style="margin-left:25% " />
             <!-- Verify Password -->
-            <div class="mb-3 d-flex align-items-center">
+            <div class="mb- d-flex align-items-center">
                 <label class="col-md-3 col-form-label">@L["Verify Password"]: <span class="text-danger">*</span></label>
                 <InputText @bind-Value="Input.VerifyPassword" type="password" class="form-control"
-                placeholder="Verify your password..." />
+                placeholder=@L["Verify your password"] />
             </div>
-            <ValidationMessage For="() => Input.VerifyPassword" />
-
+            <ValidationMessage For="() => Input.VerifyPassword" class="text-danger " style="margin-left:25% " />
             <!-- Buttons -->
             <div class="d-flex justify-content-between">
                 <button class="btn btn-secondary" type="button" @onclick="Cancel">@L["Cancel"]</button>
@@ -116,16 +125,36 @@
 
 @code {
     private InputModel Input { get; set; } = new();
+    private string? _errorMessage; // To display errors
+    private string? _successMessage; // To display success messages
+    private List<string> Countries = new List<string>();
 
-    private List<string> Countries = new()
+    private void InitializeCountries()
     {
-        "USA", "Malaysia", "China", "India", "United Kingdom", "Canada", "Australia", "France", "Germany", "Japan"
-    };
+        Countries = new List<string>
+        {
+            L["USA"],
+            L["Malaysia"],
+            L["China"],
+            L["India"],
+            L["United Kingdom"],
+            L["Canada"],
+            L["Australia"],
+            L["France"],
+            L["Germany"],
+            L["Japan"],
+        };
+    }
+    protected override void OnInitialized()
+    {
+        InitializeCountries();
+    }
 
     private async Task AddMember()
     {
         try
         {
+            // Create the new user object
             var newUser = new User
                 {
                     UserName = Input.Username,
@@ -138,24 +167,34 @@
                     Status = "Active"
                 };
 
+            // Call the service to create the user
             var result = await UserService.CreateUserAsync(newUser, Input.Password);
 
-            if (result)
-            {
-                Console.WriteLine("New member added successfully.");
-                Nav.NavigateTo("/MemberList?message=Add%20Member%20Successful");
+            // Check the result
+            if (result.IsSuccess)
+            {         
+                _errorMessage = null;
+                // Optionally reset the form
+                Input = new InputModel();
+                NavigationManager.NavigateTo("/MemberList");
+                ToastService.Notify(new(ToastType.Success, $"✨{newUser.UserName}✨ {L["Added"]}"));
+
+
             }
             else
             {
-                Console.WriteLine("Failed to add new member. Service returned an error.");
+                _errorMessage = string.Join(", ", result.Errors); // Combine all error messages
+                _successMessage = null;
             }
         }
         catch (Exception ex)
         {
+            // Log the exception and set a generic error message
             Console.WriteLine($"Error while adding member: {ex.Message}");
+            _errorMessage = "An unexpected error occurred. Please try again later.";
         }
+    }
 
-        }
     private void Cancel()
     {
         Nav.NavigateTo("/MemberList");
@@ -163,19 +202,23 @@
 
     private sealed class InputModel
     {
-        [Required(ErrorMessage = "Please enter your username")]
-        public string Username { get; set; } = string.Empty;
+        [Required(ErrorMessageResourceType = typeof(Strings), ErrorMessageResourceName = "UsernameRequired")]
+        public string Username { get; set; } = "";
 
-        [Required(ErrorMessage = "Please enter your full name")]
-        public string FullName { get; set; } = string.Empty;
+        [Required(ErrorMessageResourceType = typeof(Strings), ErrorMessageResourceName = "FullNameRequired")]
+        public string FullName { get; set; } = "";
 
-        [Required(ErrorMessage = "Please enter your email")]
-        [EmailAddress(ErrorMessage = "Invalid email format")]
-        public string Email { get; set; } = string.Empty;
+        [Required(ErrorMessageResourceType = typeof(Strings), ErrorMessageResourceName = "EmailRequired")]
+        [EmailAddress(ErrorMessageResourceType = typeof(Strings), ErrorMessageResourceName = "InvalidEmail")]
+        public string Email { get; set; } = "";
 
-        [Required(ErrorMessage = "Please enter your mobile number")]
-        [Phone(ErrorMessage = "Invalid phone number format")]
-        public string MobileNo { get; set; } = string.Empty;
+        [Required(ErrorMessageResourceType = typeof(Strings), ErrorMessageResourceName = "PasswordRequired")]
+        [DataType(DataType.Password)]
+        public string Password { get; set; } = "";
+
+        [Required(ErrorMessageResourceType = typeof(Strings), ErrorMessageResourceName = "MobileNoRequired")]
+        [Phone(ErrorMessageResourceType = typeof(Strings), ErrorMessageResourceName = "InvalidMobileNo")]
+        public string MobileNo { get; set; } = "";
 
         [Required(ErrorMessage = "Please select a category")]
         public string Category { get; set; } = "Normal Member";
@@ -183,14 +226,10 @@
         [Required(ErrorMessage = "Please select a country")]
         public string Country { get; set; } = "USA";
 
-        [Required(ErrorMessage = "Please enter your password")]
+        [Required(ErrorMessageResourceType = typeof(Strings), ErrorMessageResourceName = "VerifyPassword")]
+        [Compare("Password", ErrorMessageResourceType = typeof(Strings), ErrorMessageResourceName = "PasswordsNotMatch")]
         [DataType(DataType.Password)]
-        public string Password { get; set; } = string.Empty;
-
-        [Required(ErrorMessage = "Please verify your password")]
-        [Compare("Password", ErrorMessage = "Passwords do not match")]
-        [DataType(DataType.Password)]
-        public string VerifyPassword { get; set; } = string.Empty;
+        public string VerifyPassword { get; set; } = "";
     }
 
     private void GenerateSampleData()

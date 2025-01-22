@@ -1,41 +1,47 @@
-@using ExpenseTracker.WebApp.Components
+﻿
 @attribute [Route(Route)]
-
-
-
+@inject IServiceProvider ServiceProvider
 <h1 class="memberPortal text-center" style="margin-bottom:5%">@L["Member Portal"]</h1>
 
 <div class="d-flex justify-content-center align-items-center">
     <div style="width:50%">
 
-        <StatusMessage Message="@_errorMessage" />
+        @if (!string.IsNullOrEmpty(_errorMessage))
+        {
+            <div class="alert alert-danger" role="alert">
+                @_errorMessage
+            </div>
+        }
+        @* <StatusMessage Message="@_errorMessage" /> *@
 
-        <EditForm Model="Input" method="POST" OnValidSubmit="LoginUser" FormName="Login">
+        <EditForm Model="Input" OnValidSubmit="LoginUser" FormName="Login">
             <DataAnnotationsValidator />
 
-            <div class="mb-3 d-flex align-items-center">
+
+
+            <div class="mt-3 mb-3 d-flex align-items-center">
                 <label class="col-md-3 col-form-label">@L["Email"]: <span class="text-danger">*</span></label>
-                <InputText @bind-Value="Input.Email" class="form-control" autocomplete="email"
-                           aria-required="true"  />
+                <InputText @bind-Value="Input.Email" class="@GetInputCssClass(nameof(Input.Email))" placeholder=@L["Enter your email"] 
+                autocomplete="email" aria-required="true" />
             </div>
-            <ValidationMessage For="() => Input.Email" />
+            <ValidationMessage For="() => Input.Email" class="text-danger " style="margin-left:25% " />
 
-            <div class="mb-3 d-flex align-items-center">
+            <div class="mt-3 mb-3 d-flex align-items-center">
                 <label class="col-md-3 col-form-label">@L["Password"]: <span class="text-danger">*</span></label>
-                <InputText @bind-Value="Input.Password" type="password" class="form-control"
+                <InputText @bind-Value="Input.Password" type="password" class="@GetInputCssClass(nameof(Input.Password))" placeholder=@L["Enter your password"]
                            autocomplete="current-password" aria-required="true" />
-            </div>
-            <ValidationMessage For="() => Input.Password" />
 
+            </div>
+
+            <ValidationMessage For="() => Input.Password" class="text-danger"  style="margin-left:25%"/>
 
             <div>
                 <label class="col-md-3 col-form-label">@L["Language"]: <span class="text-danger">*</span></label>
-                <CultureSelector @rendermode="InteractiveServer"/>
+                <CultureSelector @rendermode="InteractiveServer" />
             </div>
-           
 
             <div style="display: flex; justify-content: space-between; align-items: center;">
-                <Button Color="ButtonColor.Light" type="ButtonType.Submit" style="margin-left: 30%;">@L["Login"] </Button>
+                <Button Color="ButtonColor.Light" type="ButtonType.Submit" style="margin-left: 30%;">@L["Login"]</Button>
                 <a href=ForgetPassword class="text-primary" style="margin-right: 10%;"> @L["Forget Password"]</a>
             </div>
         </EditForm>
@@ -43,15 +49,11 @@
 </div>
 
 @code {
+
     public const string Route = "/Login";
 
-
-
- 
+    private EditContext? editContext;
     private string? _errorMessage;
-
-    // [CascadingParameter]
-    // private HttpContext HttpContext { get; set; } = default!;
 
     [SupplyParameterFromForm]
     private InputModel Input { get; set; } = new();
@@ -59,9 +61,16 @@
     [SupplyParameterFromQuery]
     private string? ReturnUrl { get; set; }
 
+    private string? AntiforgeryToken { get; set; }
+
+  
+    [Inject] IAntiforgery Antiforgery { get; set; } = default!;
+
+  
 
     protected override async Task OnInitializedAsync()
     {
+        editContext = new EditContext(Input);
         var httpContext = HttpContextAccessor.HttpContext;
 
         if (httpContext != null && HttpMethods.IsGet(httpContext.Request.Method))
@@ -69,30 +78,49 @@
             // Clear the existing external cookie to ensure a clean login process
             await httpContext.SignOutAsync(IdentityConstants.ExternalScheme);
         }
+
         if (httpContext == null)
         {
             // Handle null HttpContext appropriately
             _errorMessage = "Unable to access HTTP context.";
             return;
         }
+
+        // Retrieve the antiforgery token from the cookies
+        var tokens = Antiforgery.GetAndStoreTokens(httpContext);
+        AntiforgeryToken = tokens.RequestToken;
+
+        if (string.IsNullOrEmpty(AntiforgeryToken))
+        {
+            _errorMessage = "Antiforgery token could not be generated.";
+        }
     }
 
 
 
+    private string GetInputCssClass(string fieldName)
+    {
+        if (editContext == null)
+        {
+            return "form-control"; // Default class
+        }
 
+        // Check for validation errors on the specified field
+        var hasError = editContext.GetValidationMessages(editContext.Field(fieldName)).Any();
+
+        // Apply both 'is-invalid' and 'invalid' for proper styling and icon visibility
+        return hasError ? "form-control is-invalid" : "form-control";
+    }
 
     public async Task LoginUser()
     {
         var result = await Mediator.Send(new SignIn(Input.Email, Input.Password, Input.RememberMe));
 
-        // TODO: handle LoginWith2fa
-
+      
         if (result.IsSuccess)
         {
-            // Get user preferred culture info
-
-            // Redirect tpo /Culture?id={culture_id}&returnUrl={}
-            // RedirectManager.RedirectTo(ReturnUrl ?? Portal.DashboardPage.Route);
+            // TODO: Redirect user to the preferred page
+            RedirectManager.RedirectTo(ReturnUrl ?? Portal.DashboardPage.Route);
         }
         else if (result.IsForbidden())
         {
@@ -100,27 +128,33 @@
         }
         else
         {
-            _errorMessage = "Error: Invalid login attempt.";
+            _errorMessage = result.Errors.FirstOrDefault() ?? "Error: Wrong email or password.";
         }
     }
 
     private sealed class InputModel
     {
-        [Required(ErrorMessage = "Please enter your email")]
-        [EmailAddress(ErrorMessage = "Invalid email format")]
+
+        // [Required(ErrorMessage = "⚠️"+"Please enter your email")]
+        // [EmailAddress(ErrorMessage = "Invalid email format")]
+        // public string Email { get; set; } = "";
+
+        // [Required(ErrorMessage = "⚠️"+"Please enter your password")]
+        // [DataType(DataType.Password)]
+        // public string Password { get; set; } = "";
+
+        [Required(ErrorMessageResourceType = typeof(Strings), ErrorMessageResourceName = "EmailRequired")]
+        [EmailAddress(ErrorMessageResourceType = typeof(Strings), ErrorMessageResourceName = "InvalidEmail")]
         public string Email { get; set; } = "";
 
-        [Required(ErrorMessage = "Please enter your password")]
+        [Required(ErrorMessageResourceType = typeof(Strings), ErrorMessageResourceName = "PasswordRequired")]
         [DataType(DataType.Password)]
         public string Password { get; set; } = "";
+
 
         [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }
     }
 
-  
-  
-
-
-    
+ 
 }

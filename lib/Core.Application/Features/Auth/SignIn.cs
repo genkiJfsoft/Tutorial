@@ -1,22 +1,25 @@
+using System.Resources;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 
 public record SignIn(string Email, string Password, bool Remember) : IRequest<Result>
 {
     internal class RequestHandler : IRequestHandler<SignIn, Result>
     {
-#pragma warning disable IDE0044 // Make field readonly
+ 
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly ILogger<RequestHandler> _logger;
-#pragma warning restore IDE0044
+        private readonly IStringLocalizer<ExpenseTracker.Extensions.Resources.Strings> L;
 
-        public RequestHandler(UserManager<User> userManager, SignInManager<User> signInManager, ILogger<RequestHandler> logger)
+        public RequestHandler(UserManager<User> userManager, SignInManager<User> signInManager, ILogger<RequestHandler> logger, IStringLocalizer<ExpenseTracker.Extensions.Resources.Strings> localizer)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            L = localizer;
         }
 
         public async Task<Result> Handle(SignIn request, CancellationToken cancellationToken)
@@ -26,8 +29,15 @@ public record SignIn(string Email, string Password, bool Remember) : IRequest<Re
                 var user = await _userManager.FindByEmailAsync(request.Email);
                 if (user == null)
                 {
-                    return Result.Error("Invalid login attempt. User not found.");
+                    return Result.Error(L["Email not found"]);
                 }
+
+                // Check if the user account is suspended
+                if (user.Status == "Suspend")
+                {
+                    _logger.LogWarning("Login attempt for suspended account: {Email}", user.Email);
+                    return Result.Error(L["AccountSuspended"]);
+                } 
 
                 if (string.IsNullOrEmpty(user.UserName))
                 {
@@ -79,7 +89,7 @@ public record SignIn(string Email, string Password, bool Remember) : IRequest<Re
                     return Result.Forbidden("User account is locked out.");
                 }
 
-                return Result.Error("Invalid login attempt.");
+                return Result.Error(@L["WrongPassword"]);
             }
             catch (Exception ex)
             {

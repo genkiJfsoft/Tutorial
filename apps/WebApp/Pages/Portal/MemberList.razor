@@ -9,7 +9,9 @@
 @using Microsoft.AspNetCore.WebUtilities
 @inject UserService UserService
 
-<h3 style="margin-left:2%">@L["Member List"]</h3>
+
+
+<h1 style="margin-left:2%">@L["Member List"]</h1>
 @if (!string.IsNullOrEmpty(SuccessMessage))
 {
     <div class="alert alert-success" role="alert">
@@ -18,45 +20,52 @@
 }
 
 <!-- Filter Form -->
-<div style="margin-left:5%; margin-bottom:3%">
+<div style="margin-left:5%; margin-bottom:3% ;margin-top:2%">
     <form>
         <!-- Username -->
-        <div class="d-flex justify-content-between align-items-center" style="width:40%">
+        <div class="d-flex justify-content-between align-items-center mb-4" style="width:40%">
             <label for="username" class="form-label me-1" style="width: 150px;">@L["Username"]</label>
-            <input type="text" id="username" class="form-control" style="margin-left:2%" @bind="Filter.Username" placeholder="@L["Enter username"]" />
+            <input type="text" id="username" class="form-control" style="margin-left:2%" @bind="Filter.Username" placeholder="@L["Enter your username"]" />
         </div>
 
         <!-- Email -->
-        <div class="d-flex justify-content-between align-items-center" style="width:40%">
+        <div class="d-flex justify-content-between align-items-center mb-4" style="width:40%">
             <label for="email" class="form-label me-3" style="width: 150px;">@L["Email"]</label>
-            <input type="email" id="email" class="form-control" @bind="Filter.Email" placeholder="@L["Enter email"]" />
+            <input type="email" id="email" class="form-control" @bind="Filter.Email" placeholder="@L["Enter your email"]" />
         </div>
 
+
         <!-- Register Date From -->
-        <div class="d-flex justify-content-between align-items-center" style="width:40%">
+        <div class="d-flex justify-content-between align-items-cente mb-4" style="width:40%">
             <label for="registerDateFrom" class="form-label me-5" style="white-space: nowrap; width: 150px;">
                 <span>@L["Register Date"]</span>
                 <span style="margin:25%;">@L["From"]</span>
             </label>
-            <input type="date" id="registerDateFrom" class="form-control" style="width: 60%;" @bind="Filter.RegisterDateFrom" />
-        </div>
+            <input type="date" id="registerDateFrom" class="form-control" style="width: 60%;"
+            value="@Filter.RegisterDateFrom?.ToString("yyyy-MM-dd")"
+            @onchange="OnFromDateChange" />
 
-        <!-- Register Date To -->
-        <div class="d-flex" style="width:70%; margin-left:12%">
-            <label for="registerDateTo" class="form-label d-flex flex-column align-items-start" style="margin-right:5%;">
-                <span>@L["To"]</span>
+            <label for="registerDateTo" class="form-label d-flex flex-column align-items-start" style="margin-right:5%;margin-left:5%;">
+                <span >@L["To"]</span>
             </label>
-            <input type="date" id="registerDateTo" class="form-control" style="width:33%;" @bind="Filter.RegisterDateTo" />
+            <input type="date" id="registerDateTo" class="form-control" style="width:33%;" @bind="Filter.RegisterDateTo" min="@MinToDate" />
 
-            <!-- Buttons -->
-            <div>
-                <button style="margin-left: 10px;" type="button" class="btn btn-primary" @onclick="ApplyFilter">@L["Filter"]</button>
-                <button type="button" class="btn btn-success" style="margin-left: 10px; white-space: nowrap;" @onclick="AddNewMember">@L["Add New Member"]</button>
-            </div>
+
+            <button style="margin-left: 10px; white-space: nowrap; " type="button" class="btn btn-primary" @onclick="ApplyFilter">@L["Filter"]</button>
         </div>
-    </form>
-</div>
 
+
+
+
+    </form>
+
+
+</div>
+<div style=" margin-right:5%" class="d-flex justify-content-end">
+    <button type="button" class="btn btn-success" style="white-space: nowrap;" @onclick="AddNewMember">
+        @L["Add New Member"]
+    </button>
+</div>
 <!-- Member List Table -->
 <div class="container" style="padding-left: 2%; padding-right: 2%; margin-top: 2%;">
     <table class="table table-bordered justify-content-center">
@@ -79,25 +88,37 @@
                     <td>@member.FullName</td>
                     <td>@member.Email</td>
                     <td>@member.MobileNo</td>
-                    <td>@member.Category</td>
-                    <td>@member.Status</td>
-                    <td>
-           
-                        <Button Color="ButtonColor.Warning" @onclick="() => ConfirmToggleStatus(member)">
-                          
-                            @if (member.Status == "Active")
-                            {
-                                <Icon Name="IconName.XCircleFill" />
-                            }
-                           else
-                            {
-                                <Icon Name="IconName.CheckCircleFill" />
-                            }
-                        </Button>
+                    <td>@L[@member.Category]</td>
+                    <td>@L[@member.Status ?? "UnknownStatus"]</td>
 
-                        <Button Color="ButtonColor.Primary" @onclick="() => EditMember(member.Id)"> <Icon Name="IconName.PenFill" /></Button>
-                        <Button Color="ButtonColor.Danger" @onclick="() => ConfirmDeleteMember(member)"> <Icon Name="IconName.TrashFill" /></Button>
-                        
+                    <td>
+
+                        <Tooltip Title="@(member.Status == "Active" ? L["Suspend Member"] : L["Active Member"])">
+                            <Button Color="ButtonColor.Warning" @onclick="() => ConfirmToggleStatus(member)">
+                                @if (member.Status == "Active")
+                                {
+                                    <Icon Name="IconName.XCircleFill" />
+                                }
+                                else
+                                {
+                                    <Icon Name="IconName.CheckCircleFill" />
+                                }
+                            </Button>
+                        </Tooltip>
+
+
+                        <Tooltip Title="@L["Edit Member"]" role="button">
+                            <Button Color="ButtonColor.Primary" @onclick="() => EditMember(member.Id)">                       
+                                <Icon Name="IconName.PenFill" />
+                            </Button>
+                        </Tooltip>
+
+                        <Tooltip Title="@L["Delete Member"]" role="button">
+                            <Button Color="ButtonColor.Danger" @onclick="() => ConfirmDeleteMember(member)">
+                                <Icon Name="IconName.TrashFill" />
+                            </Button>
+                        </Tooltip>
+
 
                     </td>
                 </tr>
@@ -113,14 +134,17 @@
     <button class="btn btn-secondary" @onclick="GoToNextPage" disabled="@IsLastPage">@L["Next"]</button>
 </div>
 
-<!-- Confirmation Modal -->
-<PromptMessage Visible="@ShowPrompt"
-               Message="@PromptMessage"
-               OnConfirm="ConfirmAction"
-               OnCancel="CancelPrompt" />
+<!-- Confirmation Modal --> 
+<PromptMessage Visible="@ShowPrompt" 
+Message="@PromptMessage" 
+OnConfirm="ConfirmAction" 
+OnCancel="CancelPrompt" /> 
 
 @code {
- 
+
+
+
+
 
     private List<User> PaginatedMembers = new(); // Members for the current page
     private List<User> Members = new();
@@ -137,8 +161,33 @@
     private string? SuccessMessage;
     private Timer? MessageTimer;
 
-    
-   
+    private string? MinToDate;
+
+
+    private void OnFromDateChange(ChangeEventArgs e)
+    {
+        if (DateTime.TryParse(e.Value?.ToString(), out var fromDate))
+        {
+            // Update the Filter model's From Date
+            Filter.RegisterDateFrom = fromDate;
+
+            // Set MinToDate to the selected From Date
+            MinToDate = fromDate.ToString("yyyy-MM-dd");
+
+            // If the To Date is earlier than the From Date, reset it
+            if (Filter.RegisterDateTo.HasValue && Filter.RegisterDateTo < fromDate)
+            {
+                Filter.RegisterDateTo = null;
+            }
+        }
+        else
+        {
+            // Clear MinToDate if From Date is invalid
+            MinToDate = null;
+        }
+    }
+
+
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync(); // Set preferred language from BaseLocalizedComponent
@@ -155,7 +204,7 @@
     private async Task LoadMembersAsync()
     {
         // Load members from the service
-        Members = await UserService.GetAllUsersAsync();
+        Members = await UserService.GetActiveMembersAsync();
         UpdatePaginatedMembers();
 
         // Check for query string parameters
@@ -192,15 +241,15 @@
     {
         // Unsubscribe from the event to avoid memory leaks
         NavigationManager.LocationChanged -= HandleLocationChanged;
-      
+
 
     }
 
     private void HideSuccessMessage()
-{
-    SuccessMessage = null;
-    InvokeAsync(StateHasChanged); // Ensures this runs on the UI thread
-}
+    {
+        SuccessMessage = null;
+        InvokeAsync(StateHasChanged); // Ensures this runs on the UI thread
+    }
 
     protected override async Task OnParametersSetAsync()
     {
@@ -219,7 +268,7 @@
             Console.WriteLine("No message found in query.");
         }
 
-        Members = await UserService.GetAllUsersAsync();
+        Members = await UserService.GetActiveMembersAsync();
         UpdatePaginatedMembers();
     }
 
@@ -267,23 +316,25 @@
         }
     }
 
+
+
     private void AddNewMember()
     {
 
         NavigationManager.NavigateTo("/AddNewMember");
 
-}
+    }
 
     private void EditMember(string memberId)
     {
-        NavigationManager.NavigateTo($"/EditMember/{memberId}?message=Edit%20Member%20Successful");
+        NavigationManager.NavigateTo($"/EditMember/{memberId}");
     }
 
     private void ConfirmDeleteMember(User member)
     {
         SelectedMember = member;
         ActionType = "Delete";
-        PromptMessage = $"Are you sure you want to delete the member '{member.UserName}'?";
+        PromptMessage = $"{L["ConfirmDelete"]} '{member.UserName}'?";
         ShowPrompt = true;
     }
 
@@ -291,31 +342,45 @@
     {
         SelectedMember = member;
         ActionType = "ToggleStatus";
+
+
+
         PromptMessage = member.Status == "Active"
-            ? "Are you sure you want to suspend this member?"
-            : "Are you sure you want to activate this member?";
+            ? L["ConfirmSuspend"]
+
+            : L["ConfirmActive"];
         ShowPrompt = true;
     }
+
+
+
+
 
     private async Task ConfirmAction()
     {
         if (ActionType == "Delete" && SelectedMember != null)
         {
+
             // Perform the delete operation
-            if (await UserService.DeleteUserAsync(SelectedMember.Id))
-            {
+
+            await UserService.DeleteUserAsync(SelectedMember.Id);
+
                 // Remove the deleted member from the Members list
                 Members.Remove(SelectedMember);
-
+                  await LoadMembersAsync();
                 // Update the paginated members to refresh the table
                 UpdatePaginatedMembers();
+
+                // Show a localized success toast
+                ToastService.Notify(new (ToastType.Success,
+                    $"✨{SelectedMember.UserName}✨ {L["Deleted"]}"));
 
                 // Clear the selected member
                 SelectedMember = null;
 
-                // Redirect with a success message
-                NavigationManager.NavigateTo("/MemberList?message=Delete%20Member%20Successful", forceLoad: false);
-            }
+                // Redirect
+                NavigationManager.NavigateTo("/MemberList", forceLoad: true);
+            
         }
         else if (ActionType == "ToggleStatus" && SelectedMember != null)
         {
@@ -325,11 +390,20 @@
             // Update the database
             await UserService.UpdateUserAsync(SelectedMember);
 
+            // Localize the status message
+            var statusMessage = SelectedMember.Status == "Active"
+                ? L["ActivatedSuccessfully"]
+                : L["SuspendedSuccessfully"];
+
+            // Show a localized success toast
+            ToastService.Notify(new (ToastType.Success,
+                $"✨{SelectedMember.UserName}✨ {statusMessage}"));
+
             // Refresh the table
             UpdatePaginatedMembers();
 
-            // Redirect with a success message
-            NavigationManager.NavigateTo($"/MemberList?message={(SelectedMember.Status == "Active" ? "Member%20Activated" : "Member%20Suspended")}", forceLoad: false);
+            // Redirect
+            NavigationManager.NavigateTo("/MemberList", forceLoad: false);
         }
 
         CancelPrompt();

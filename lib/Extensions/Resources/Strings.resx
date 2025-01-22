@@ -118,269 +118,210 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Login" xml:space="preserve">
-    <value>登录</value>
+    <value>Login</value>
   </data>
   <data name="Logout" xml:space="preserve">
-    <value>注销</value>
+    <value>Logout </value>
   </data>
   <data name="Home" xml:space="preserve">
-    <value>主页</value>
+    <value>Home</value>
   </data>
   <data name="Collections" xml:space="preserve">
-    <value>合集</value>
+    <value>Collections</value>
   </data>
   <data name="Contact" xml:space="preserve">
-    <value>通讯录</value>
+    <value>Contact</value>
   </data>
   <data name="Forget Password" xml:space="preserve">
-    <value>忘记密码</value>
+    <value>Forget Password</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>邮箱</value>
+    <value>Email</value>
   </data>
   <data name="Language" xml:space="preserve">
-    <value>语言</value>
+    <value>Language</value>
   </data>
   <data name="English" xml:space="preserve">
     <value>English</value>
   </data>
   <data name="Chinese" xml:space="preserve">
-    <value>中文</value>
+    <value>Chinese</value>
   </data>
   <data name="Member" xml:space="preserve">
-    <value>会员</value>
+    <value>Member</value>
   </data>
   <data name="Welcome " xml:space="preserve">
-    <value>欢迎</value>
+    <value>Welcome </value>
   </data>
   <data name="Back" xml:space="preserve">
-    <value>返回</value>
+    <value>Back</value>
   </data>
   <data name="Welcome Back" xml:space="preserve">
-    <value>欢迎回来</value>
+    <value>Welcome Back</value>
   </data>
   <data name="Member Portal" xml:space="preserve">
-    <value>会员门户</value>
+    <value>Member Portal</value>
   </data>
   <data name="Password" xml:space="preserve">
-    <value>密码</value>
+    <value>Password</value>
   </data>
   <data name="Member List" xml:space="preserve">
-    <value>会员名单</value>
+    <value>Member List</value>
   </data>
   <data name="Username" xml:space="preserve">
-    <value>用户名</value>
+    <value>Username</value>
   </data>
   <data name="Register Date" xml:space="preserve">
-    <value>申请日期</value>
+    <value>Register Date</value>
   </data>
   <data name="From" xml:space="preserve">
-    <value>从</value>
+    <value>From</value>
   </data>
   <data name="To" xml:space="preserve">
-    <value>至</value>
+    <value>To</value>
   </data>
   <data name="Filter" xml:space="preserve">
-    <value>筛选</value>
+    <value>Filter</value>
   </data>
   <data name="Add New Member" xml:space="preserve">
-    <value>添加新成员</value>
+    <value>Add New Member</value>
   </data>
   <data name="Full Name" xml:space="preserve">
-    <value>全名</value>
+    <value>Full Name</value>
   </data>
   <data name="Mobile No" xml:space="preserve">
-    <value>手机号码</value>
+    <value>Mobile No</value>
   </data>
   <data name="Status" xml:space="preserve">
-    <value>状态</value>
+    <value>Status</value>
   </data>
   <data name="Actions" xml:space="preserve">
-    <value>采取行动</value>
+    <value>Actions</value>
   </data>
   <data name="Category" xml:space="preserve">
-    <value>身份类型</value>
+    <value>Category</value>
   </data>
   <data name="Previous" xml:space="preserve">
-    <value>上一页</value>
+    <value>Previous</value>
   </data>
   <data name="Next" xml:space="preserve">
-    <value>下一页</value>
+    <value>Next</value>
   </data>
   <data name="Page" xml:space="preserve">
-    <value>页面</value>
+    <value>Page</value>
   </data>
   <data name="of" xml:space="preserve">
-    <value>共</value>
+    <value>of</value>
   </data>
   <data name="Activity List" xml:space="preserve">
-    <value>活动清单</value>
+    <value>Activity List</value>
   </data>
   <data name="Sales Report" xml:space="preserve">
-    <value>销售报告</value>
+    <value>Sales Report</value>
   </data>
   <data name="en" xml:space="preserve">
     <value>English</value>
   </data>
   <data name="zh" xml:space="preserve">
-    <value>中文</value>
+    <value>Chinese</value>
   </data>
   <data name="Country" xml:space="preserve">
-    <value>国家</value>
+    <value>Country</value>
   </data>
   <data name="Verify Password" xml:space="preserve">
-    <value>验证密码</value>
+    <value>Verify Password</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>取消</value>
+    <value>Cancel</value>
   </data>
   <data name="Dashboard" xml:space="preserve">
-    <value>仪表板</value>
+    <value>Dashboard</value>
   </data>
   <data name="Sign Out" xml:space="preserve">
-    <value>注销</value>
+    <value>Sign Out </value>
   </data>
   <data name="Portal" xml:space="preserve">
-    <value>门户</value>
+    <value>Portal</value>
   </data>
   <data name="Edit Member" xml:space="preserve">
-    <value>编辑会员</value>
+    <value>Edit Member</value>
   </data>
   <data name="EmailRequired" xml:space="preserve">
-    <value>⚠️请输入您的邮箱</value>
+    <value>⚠️Please enter your email</value>
   </data>
   <data name="PasswordRequired" xml:space="preserve">
-    <value>⚠️请输入您的密码</value>
+    <value>⚠️Please enter your password</value>
   </data>
   <data name="Reset Password" xml:space="preserve">
-    <value>重置密码</value>
+    <value>Reset Password</value>
   </data>
   <data name="Merchant" xml:space="preserve">
-    <value>商人</value>
+    <value>Merchant</value>
   </data>
   <data name="Normal Member" xml:space="preserve">
-    <value>普通会员</value>
+    <value>Normal Member</value>
   </data>
   <data name="Active" xml:space="preserve">
-    <value>活动</value>
+    <value>Active</value>
   </data>
   <data name="Suspend" xml:space="preserve">
-    <value>暂停</value>
+    <value>Suspend</value>
   </data>
   <data name="Suspend Member" xml:space="preserve">
-    <value>暂停会员</value>
+    <value>Suspend Member</value>
   </data>
   <data name="Active Member" xml:space="preserve">
-    <value>活动会员</value>
+    <value>Active Member </value>
   </data>
   <data name="Delete Member" xml:space="preserve">
-    <value>删除会员</value>
+    <value>Delete Member</value>
   </data>
   <data name="USA" xml:space="preserve">
-    <value>美国</value>
+    <value>USA</value>
   </data>
   <data name="Malaysia" xml:space="preserve">
-    <value>马来西亚</value>
+    <value>Malaysia</value>
   </data>
   <data name="China" xml:space="preserve">
-    <value>中国</value>
+    <value>China </value>
   </data>
   <data name="India" xml:space="preserve">
-    <value>印度</value>
+    <value>India</value>
   </data>
   <data name="United Kingdom" xml:space="preserve">
-    <value>英国</value>
+    <value>United Kingdom</value>
   </data>
   <data name="Canada" xml:space="preserve">
-    <value>加拿大</value>
+    <value>Canada</value>
   </data>
   <data name="Australia" xml:space="preserve">
-    <value>澳大利亚</value>
+    <value>Australia</value>
   </data>
   <data name="France" xml:space="preserve">
-    <value>法国</value>
+    <value>France</value>
   </data>
   <data name="Germany" xml:space="preserve">
-    <value>德国</value>
+    <value>Germany</value>
   </data>
   <data name="Japan" xml:space="preserve">
-    <value>日本</value>
+    <value>Japan</value>
   </data>
   <data name="AccountSuspended" xml:space="preserve">
-    <value>您的帐户已被暂停。请联系支持人员。</value>
+    <value>Your account has been suspended. Please contact support.</value>
   </data>
-  <data name="Enter your email" xml:space="preserve">
-    <value>输入你的邮箱</value>
+  <data name="WrongPassword" xml:space="preserve">
+    <value>Email or Password entered wrong.</value>
   </data>
-  <data name="Enter your password" xml:space="preserve">
-    <value>输入你的密码</value>
+  <data name="DuplicateEmail" xml:space="preserve">
+    <value>The email is already registered. Please use a different email.</value>
   </data>
-  <data name="Verify your password" xml:space="preserve">
-    <value>验证你的密码</value>
+  <data name="DuplicateUsername" xml:space="preserve">
+    <value>The username is already taken. Please choose another.</value>
   </data>
-  <data name="Enter your mobile number" xml:space="preserve">
-    <value>输入你的手机号码</value>
+  <data name="PasswordValidation" xml:space="preserve">
+    <value>Password must be at least 6 characters long, one special character, one numeric digit, one lowercase letter, one uppercase letter.  (Example: Ab@123)</value>
   </data>
-  <data name="Enter your full name" xml:space="preserve">
-    <value>输入你的全名</value>
-  </data>
-  <data name="Enter your username" xml:space="preserve">
-    <value>输入你的用户名</value>
-  </data>
-  <data name="InvalidEmail" xml:space="preserve">
-    <value>⚠️电子邮件格式无效</value>
-  </data>
-  <data name="ResetPasswordSuccess1" xml:space="preserve">
-    <value>密码重置成功。请查看您的电子邮件以获取进一步的说明。</value>
-  </data>
-  <data name="FullNameRequired" xml:space="preserve">
-    <value>⚠️请输入你的全名</value>
-  </data>
-  <data name="InvalidMobileNo" xml:space="preserve">
-    <value>⚠️手机号码格式不正确</value>
-  </data>
-  <data name="MobileNoRequired" xml:space="preserve">
-    <value>⚠️请输入你的手机号</value>
-  </data>
-  <data name="UsernameRequired" xml:space="preserve">
-    <value>⚠️请输入你的用户名</value>
-  </data>
-  <data name="PasswordsNotMatch" xml:space="preserve">
-    <value>⚠️密码不匹配</value>
-  </data>
-  <data name="VerifyPassword" xml:space="preserve">
-    <value>⚠️请输入你的验证密码</value>
-  </data>
-  <data name="Edited" xml:space="preserve">
-    <value>编辑成功</value>
-  </data>
-  <data name="Added" xml:space="preserve">
-    <value>成功添加为新成员 ➕</value>
-  </data>
-  <data name="Deleted" xml:space="preserve">
-    <value>删除成功🗑️</value>
-  </data>
-  <data name="ActivatedSuccessfully" xml:space="preserve">
-    <value>已成功激活✅</value>
-  </data>
-  <data name="SuspendedSuccessfully" xml:space="preserve">
-    <value>已成功暂停 ❌</value>
-  </data>
-  <data name="ConfirmDelete" xml:space="preserve">
-    <value>您确定要删除</value>
-  </data>
-  <data name="ConfirmSuspend" xml:space="preserve">
-    <value>您确定要暂停该成员吗？</value>
-  </data>
-  <data name="ConfirmActive" xml:space="preserve">
-    <value>您确定要激活该成员吗？</value>
-  </data>
-  <data name="Yes" xml:space="preserve">
-    <value>✔️</value>
-  </data>
-  <data name="No" xml:space="preserve">
-    <value>❌
-
-</value>
+  <data name="ResetPasswordSuccess" xml:space="preserve">
+    <value>Password reset successfully. Check your email for further instructions.</value>
   </data>
 </root>

@@ -48,7 +48,6 @@ try
     app.UseSerilogRequestLogging();
 
     app.UseHttpsRedirection();
-
     app.UseAntiforgery();
 
     app.MapStaticAssets();

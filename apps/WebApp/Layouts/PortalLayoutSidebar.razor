@@ -8,160 +8,133 @@
 @inject UserManager<User> UserManager
 @inject UserService UserService
 
-<aside id="sidebar">
+<aside id="sidebar" style="background-color:chocolate">
     <div class="accordion" id="sidebarMenu">
-        <div class="mt-2 px-3 py-2 fw-medium small text-secondary">Main Navigation</div>
 
-        <div class="list-group list-group-flush sidebar-menu-list-group">
-            <NavLink class="list-group-item list-group-item-action" href="@Pages.Portal.DashboardPage.Route" Match="NavLinkMatch.All">
+      @*   <div class="list-group list-group-flush sidebar-menu-list-group"> *@
+           @*  <NavLink class="list-group-item list-group-item-action" href="@Pages.Portal.DashboardPage.Route" Match="NavLinkMatch.All">
                 <i class="fas fa-table-cells"></i> @L["Dashboard"]
             </NavLink>
-          @*   <NavLink class="list-group-item list-group-item-action" href="@Pages.Portal.ExpensesPage.Route" Match="NavLinkMatch.All">
+            <NavLink class="list-group-item list-group-item-action" href="@Pages.Portal.ExpensesPage.Route" Match="NavLinkMatch.All">
                 <i class="fa-solid fa-book"></i> Expenses
             </NavLink> *@
-        </div>
-     
-        <div class="container mt-3" style="width: 200px; border: 1px solid black; padding: 0;">
-            <!-- Member (Non-Clickable Static Header) -->
-            <div style="border-bottom: 1px solid black; background-color: #e7f0ff; padding: 10px; font-weight: bold;">
-                @L["Member"]
-            </div>
-
-            <!-- Member List (Clickable and Expandable) -->
-            <div style="border-bottom: 1px solid black;">
-                <button class="btn w-100 text-start"
-                @onclick="ToggleMemberList"
-                style="background-color: transparent; border: none; padding: 10px;">
-                    @L["Member List"]
-                </button>
-                @if (IsMemberListExpanded)
-                {
-                    <div style="padding: 20px;">
-                    </div>
-                }
-            </div>
-          
-        @if (Category == "Merchant")
-        {
-                <div style="border-bottom: 1px solid black;">
-                    <button class="btn w-100 text-start"
-                            @onclick="ToggleSalesReport"
-                            style="background-color: transparent; border: none; padding: 10px;">
-                        @L["Sales Report"]
-                    </button>
-                    @if (IsSalesReportExpanded)
-                     
-                    {
-
-                        <div style="padding: 20px;">
-                        </div>
-
-                    }
-                </div>
-        }
-            <!-- Sales Report (Clickable and Expandable) -->
-            <!-- Activity List (Clickable and Expandable) -->
-            <div>
-                <button class="btn w-100 text-start"
-                        @onclick="ToggleActivityList"
-                        style="background-color: transparent; border: none; padding: 10px;">
-                    @L["Activity List"]
-                </button>
-                @if (IsActivityListExpanded)
-                {
-                    <div style="padding: 20px;">
-                    </div>
-                }
-            </div>
-        </div>
 
 
-        @*  <AuthorizeView Roles="@Roles.User.Admin">
-            <div class="mt-2 px-3 py-2 fw-medium small text-secondary">Manage</div>
-
-            <div class="list-group list-group-flush sidebar-menu-list-group">
+      @*       <div class="list-group list-group-flush sidebar-menu-list-group">
                 <a class="list-group-item list-group-item-action collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseManage" aria-expanded="false" aria-controls="collapseManage">
                     <i class="fas fa-toolbox"></i>
-                    Users & Access
+                    @L["Member List"]
                     <b class="fas fa-angle-down"></b>
                 </a>
                 <div class="collapse" id="collapseManage" aria-labelledby="headingOne" data-bs-parent="#sidebarMenu">
                     <div class="list-group list-group-flush">
+                        <NavLink class="list-group-item" href="/MemberList">  @L["Member"]</NavLink>
+                     @*    <NavLink class="list-group-item" href="@Pages.Portal.ManageUsersPage.Route">Users</NavLink>
+                        <NavLink class="list-group-item" href="@Pages.Portal.ManageRolesPage.Route">Roles</NavLink> *@
+                  @*   </div>
+                </div>
+            </div> *@ 
+
+
+           @*  @if (Category == "Merchant")
+            {
+
+                <div class="list-group list-group-flush sidebar-menu-list-group">
+                    <a class="list-group-item list-group-item-action collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseManage" aria-expanded="false" aria-controls="collapseManage">
+                    <i class="fas fa-toolbox"></i>
+                    @L["Sales Report"]
+                    <b class="fas fa-angle-down"></b>
+                </a>
+                <div class="collapse" id="collapseManage" aria-labelledby="headingOne" data-bs-parent="#sidebarMenu">
+                    <div class="list-group list-group-flush">
+                        <NavLink class="list-group-item" href="/MemberList">  @L["Member"]</NavLink>
                         <NavLink class="list-group-item" href="@Pages.Portal.ManageUsersPage.Route">Users</NavLink>
                         <NavLink class="list-group-item" href="@Pages.Portal.ManageRolesPage.Route">Roles</NavLink>
                     </div>
                 </div>
             </div>
-        </AuthorizeView> *@
+            } *@
+
+
+            @* <div class="list-group list-group-flush sidebar-menu-list-group">
+                <a class="list-group-item list-group-item-action collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseManage" aria-expanded="false" aria-controls="collapseManage">
+                    <i class="fas fa-toolbox"></i>
+                    @L["Activity List"]
+                    <b class="fas fa-angle-down"></b>
+                </a>
+                <div class="collapse" id="collapseManage" aria-labelledby="headingOne" data-bs-parent="#sidebarMenu">
+                    <div class="list-group list-group-flush">
+                        <NavLink class="list-group-item" href="/MemberList">  @L["Member"]</NavLink>
+                        <NavLink class="list-group-item" href="@Pages.Portal.ManageUsersPage.Route">Users</NavLink>
+                        <NavLink class="list-group-item" href="@Pages.Portal.ManageRolesPage.Route">Roles</NavLink>
+                    </div>
+                </div>
+            </div> *@
+            <style>
+                .list-group-item{
+                 
+                }
+
+            </style>
+        <div class="list-group list-group-flush sidebar-menu-list-group" id="sidebarMenu">
+    <!-- Member List -->
+            <a class="list-group-item list-group-item-action collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseMember" aria-expanded="false" aria-controls="collapseMember">
+      <Icon Name="IconName.PeopleFill" Color="IconColor.Info"></Icon>
+        @L["Member"]
+        <b class="fas fa-angle-down"></b>
+    </a>
+    <div class="collapse" id="collapseMember" data-bs-parent="#sidebarMenu">
+        <div class="list-group list-group-flush">
+            <NavLink class="list-group-item" href="/MemberList">@L["Member List"]</NavLink>
+            @*  <NavLink class="list-group-item" href="#">@L["1"]</NavLink>
+              <NavLink class="list-group-item" href="#">@L["2"]</NavLink>
+               <NavLink class="list-group-item" href="#">@L["3"]</NavLink> *@
+        </div>
     </div>
+
+    <!-- Sales Report -->
+    @if (Category == "Merchant")
+    {
+        <a class="list-group-item list-group-item-action collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseSalesReport" aria-expanded="false" aria-controls="collapseSalesReport">
+           <Icon Name="IconName.CashCoin" Color="IconColor.Warning"></Icon>
+            @L["Sales Report"]
+            <b class="fas fa-angle-down"></b>
+        </a>
+        <div class="collapse" id="collapseSalesReport" data-bs-parent="#sidebarMenu">
+            <div class="list-group list-group-flush">
+           @*    <NavLink class="list-group-item" href="#">@L["Demo"]</NavLink>
+                <NavLink class="list-group-item" href="#">@L["Demo"]</NavLink>
+                 <NavLink class="list-group-item" href="#">@L["Demo"]</NavLink> *@
+            </div>
+        </div>
+    }
+
+    <!-- Activity List -->
+    <a class="list-group-item list-group-item-action collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseActivityList" aria-expanded="false" aria-controls="collapseActivityList">
+       <Icon Name="IconName.CardList" Color="IconColor.Primary"></Icon>
+         @L["Sales Report"]
+        <b class="fas fa-angle-down"></b>
+    </a>
+    <div class="collapse" id="collapseActivityList" data-bs-parent="#sidebarMenu">
+        <div class="list-group list-group-flush">
+ @* <NavLink class="list-group-item" href="#">@L["Demo"]</NavLink>
+  <NavLink class="list-group-item" href="#">@L["Demo"]</NavLink>
+   <NavLink class="list-group-item" href="#">@L["Demo"]</NavLink> *@
+        </div>
+    </div>
+</div>
+
+        </div>
+
 </aside>
 <aside class="sidebar-backdrop"></aside>
 
 
 @code {
-    private bool IsMemberListExpanded = false;
-    private bool IsSalesReportExpanded = false;
-    private bool IsActivityListExpanded = false;
-
  
-
-    private void ToggleMemberList()
-    {
-        IsMemberListExpanded = !IsMemberListExpanded;
-        IsSalesReportExpanded = false;
-        IsActivityListExpanded = false;
-        NavigationManager.NavigateTo("/MemberList");
-    }
-
-    private void ToggleSalesReport()
-    {
-        IsSalesReportExpanded = !IsSalesReportExpanded;
-        IsMemberListExpanded = false;
-        IsActivityListExpanded = false;
-    }
-
-    private void ToggleActivityList()
-    {
-        IsActivityListExpanded = !IsActivityListExpanded;
-        IsMemberListExpanded = false;
-        IsSalesReportExpanded = false;
-    }
     private string Category = string.Empty;
   
  
-
-    // protected async Task ChangeLanguage(string culture)
-    // {
-    //     // Update the culture globally
-    //     CultureInfo.CurrentCulture = new CultureInfo(culture);
-    //     CultureInfo.CurrentUICulture = new CultureInfo(culture);
-
-    //     // Update the local variable for display
-    //     currentCulture = culture;
-
-    //     // Debug output
-    //     Console.WriteLine($"ChangeLanguage - Current Culture: {CultureInfo.CurrentCulture.Name}");
-    //     Console.WriteLine($"ChangeLanguage - Current UI Culture: {CultureInfo.CurrentUICulture.Name}");
-    //     Console.WriteLine($"ChangeLanguage - Preferred Language: {currentCulture}");
-
-    //     // Save to the database
-    //     var userId = await UserService.GetCurrentUserIdAsync();
-    //     if (userId != null)
-    //     {
-    //         var success = await UserService.UpdatePreferredLanguageAsync(userId, culture);
-    //         if (success)
-    //         {
-    //             Console.WriteLine($"Preferred language updated to: {culture}");
-    //         }
-    //         else
-    //         {
-    //             Console.WriteLine("Failed to update preferred language.");
-    //         }
-    //     }
-
-    //     // Trigger a UI refresh
-    //     StateHasChanged();
-    // }
 
     protected override async Task OnInitializedAsync()
     {
