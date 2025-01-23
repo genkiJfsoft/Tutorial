@@ -248,4 +248,34 @@
   --#{$prefix}dropdown-header-color: #{$dropdown-dark-header-color};
   // scss-docs-end dropdown-dark-css-vars
 }
+.custom-dropdown {
+    border: 1px solid #ddd;
+    color: black;
+    border-radius: 50px;
+    background-color: #ffffff;
+}
 
+.btn-custom {
+    background-color: white;
+    color: white;
+    font-weight: bold;
+    border-radius: 20px;
+    padding: 30px 15px;
+}
+
+.custom-menu {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.custom-item {
+    padding: 10px 15px;
+    font-size: 16px;
+    transition: background-color 0.3s;
+    background-color:green;
+}
+
+.custom-item:hover {
+    background-color: white;
+}

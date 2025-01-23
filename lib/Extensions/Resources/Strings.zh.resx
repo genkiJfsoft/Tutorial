@@ -141,9 +141,6 @@
   <data name="Language" xml:space="preserve">
     <value>语言</value>
   </data>
-  <data name="English" xml:space="preserve">
-    <value>英语</value>
-  </data>
   <data name="Chinese" xml:space="preserve">
     <value>中文</value>
   </data>
@@ -218,9 +215,6 @@
   </data>
   <data name="Sales Report" xml:space="preserve">
     <value>销售报告</value>
-  </data>
-  <data name="en" xml:space="preserve">
-    <value>English</value>
   </data>
   <data name="zh" xml:space="preserve">
     <value>中文</value>
@@ -322,7 +316,10 @@
   <data name="PasswordValidation" xml:space="preserve">
     <value>密码必须至少包含一个特殊字符、一个数字、一个小写字母、一个大写字母。 (例如: Ab@123)</value>
   </data>
-  <data name="ResetPasswordSuccess" xml:space="preserve">
-    <value>密码重置成功。请查看您的电子邮件以获取进一步的说明。</value>
+  <data name="英语" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="en" xml:space="preserve">
+    <value>English</value>
   </data>
 </root>

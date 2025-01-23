@@ -6,16 +6,16 @@
 @inject IOptions<RequestLocalizationOptions> RequestLocalizationOptions
 @inject IStringLocalizer<Resources.Strings> L
 
-<Dropdown>
-    <DropdownToggleButton  >
+<Dropdown Class="custom-dropdown">
+    <DropdownToggleButton Class="btn-custom" > 
         @L[SelectedCulture.Name]
     </DropdownToggleButton>
-    <DropdownMenu Position="DropdownMenuPosition.End">
+    <DropdownMenu Position="DropdownMenuPosition.End" Class="custom-menu">
         @if (SupportedCultures is not null)
         {
             @foreach (var culture in SupportedCultures)
             {
-                <DropdownItem Active="@(culture.Name == SelectedCulture.Name)" @onclick="() => ChangeCultureAsync(culture)">@culture.DisplayName</DropdownItem>
+                <DropdownItem Class="custom-item" Active="@(culture.Name == SelectedCulture.Name)" @onclick="() => ChangeCultureAsync(culture)">@culture.NativeName</DropdownItem>
             }
         }
     </DropdownMenu>
@@ -44,5 +44,15 @@
             NavigationManager.NavigateTo($"Culture?id={id}&returnUrl={returnUrl}", forceLoad: true);
         }
         await Task.CompletedTask;
+    }
+
+    private string GetNativeName(CultureInfo culture)
+    {
+        // Use fixed "English" for the English culture, otherwise use NativeName
+        return culture.Name switch
+        {
+            "en" => "English",
+            _ => culture.NativeName
+        };
     }
 }

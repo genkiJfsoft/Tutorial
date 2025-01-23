@@ -141,9 +141,6 @@
   <data name="Language" xml:space="preserve">
     <value>Language</value>
   </data>
-  <data name="English" xml:space="preserve">
-    <value>English</value>
-  </data>
   <data name="Chinese" xml:space="preserve">
     <value>Chinese</value>
   </data>
@@ -218,9 +215,6 @@
   </data>
   <data name="Sales Report" xml:space="preserve">
     <value>Sales Report</value>
-  </data>
-  <data name="en" xml:space="preserve">
-    <value>English</value>
   </data>
   <data name="zh" xml:space="preserve">
     <value>Chinese</value>
@@ -321,7 +315,10 @@
   <data name="PasswordValidation" xml:space="preserve">
     <value>Password must be at least 6 characters long, one special character, one numeric digit, one lowercase letter, one uppercase letter.  (Example: Ab@123)</value>
   </data>
-  <data name="ResetPasswordSuccess" xml:space="preserve">
-    <value>Password reset successfully. Check your email for further instructions.</value>
+  <data name="英语" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="en" xml:space="preserve">
+    <value>English</value>
   </data>
 </root>
